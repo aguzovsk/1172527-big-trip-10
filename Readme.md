@@ -1,7 +1,7 @@
 # Личный проект «Большое путешествие» [![Build status][travis-image]][travis-url]
 
 * Студент: [Антон](https://up.htmlacademy.ru/ecmascript/10/user/1172527).
-* Наставник: `Неизвестно`.
+* Наставник: `Илья Задонский`.
 
 ---
 
