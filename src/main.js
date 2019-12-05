@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const CARD_COUNT = 3;
 
@@ -79,7 +79,7 @@ const createSortedTemplate = () => {
   );
 };
 
-const createNewEventTemplate = () => {
+/*const createNewEventTemplate = () => {
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
       <header class="event__header">
@@ -189,7 +189,7 @@ const createNewEventTemplate = () => {
       </header>
     </form>`
   );
-};
+}; */
 
 const createCardTemplate = () => {
   return (
@@ -376,5 +376,5 @@ const events = tripEvents.querySelector(`.trip-days`);
 new Array(CARD_COUNT)
   .fill(``)
   .forEach(
-    () => render(events, createCardTemplate())
+      () => render(events, createCardTemplate())
   );
