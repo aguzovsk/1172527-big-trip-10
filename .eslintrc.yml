@@ -1,6 +1,6 @@
-parseOptions:
+parserOptions:
   ecmaVersion: 2015
-  sourceTypes: 'module'
+  sourceType: 'module'
 
 env:
   es6: true
