@@ -1,3 +1,7 @@
+parseOptions:
+  ecmaVersion: 2015
+  sourceTypes: 'module'
+
 env:
   es6: true
   browser: true
