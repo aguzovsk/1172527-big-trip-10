@@ -1,31 +1,33 @@
-import {createCardContainer} from './components/card-container.js';
 import {createFiltersTemplate} from './components/filters.js';
 import {createMenuTemplate} from './components/menu.js';
 import {createNewEventTemplate} from './components/new-event.js';
 import {createRouteTemplate} from './components/route.js';
 import {createSortedTemplate} from './components/sort.js';
-import {createEventDetails} from './components/new-event-details.js';
+import {createDaysContainer} from './components/days-container.js';
 import {cities} from './const.js';
 import {generateEventList, generateEventData} from './mock/event-details.js';
+import {createEventDetails} from './components/new-event-details.js';
 
 const render = (container, template, place = `beforeend`) => {
   container.insertAdjacentHTML(place, template);
 };
 
-const tripControls = document.querySelector(`.trip-main__trip-controls`);
 const tripInfo = document.querySelector(`.trip-main__trip-info`);
-
 render(tripInfo, createRouteTemplate(), `beforebegin`);
+
+const tripControls = document.querySelector(`.trip-main__trip-controls`);
 render(tripControls.children[0], createMenuTemplate(), `afterend`);
 render(tripControls, createFiltersTemplate());
 
 const tripEvents = document.querySelector(`.trip-events`);
-
 render(tripEvents, createSortedTemplate());
-render(tripEvents, createCardContainer(generateEventList()));
+render(tripEvents, createNewEventTemplate());
+render(tripEvents, createDaysContainer(generateEventList()));
 
-const sorted = tripEvents.querySelector(`.trip-sort`);
-render(sorted, createNewEventTemplate(), `afterend`);
+const totalSum = tripInfo.querySelector(`.trip-info__cost-value`);
+const eventPrices = Array.from(tripEvents.querySelectorAll(`.event__price-value`));
+const sum = eventPrices.reduce((acc, {innerText}) => acc + parseInt(innerText), 0);
+totalSum.innerText = sum;
 
 const newEvent = tripEvents.querySelector(`.event--edit`);
 const destinationInput = newEvent.querySelector(`#event-destination-1`);

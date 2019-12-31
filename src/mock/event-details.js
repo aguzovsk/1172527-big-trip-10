@@ -6,13 +6,17 @@ import {generateOfferList} from './offer.js';
 
 const LENGTH = 10;
 let seq = 0;
+const dateStartOffset = -5;
+const dateEndOffset = 6;
+const endDateMaximumDayOffset = 3;
 
 const getRandomDate = () => {
   const targetDate = new Date();
-  const sign = Math.random() > 0.5 ? 1 : -1;
-  const diffValue = sign * getRandomIntInRange(0, 200);
+  const days = getRandomIntInRange(dateStartOffset, dateEndOffset);
+  const hours = getRandomIntInRange(-12, 12);
+  const minutes = getRandomIntInRange(-30, 30);
 
-  targetDate.setDate(targetDate.getDate() + diffValue);
+  targetDate.setTime(targetDate.getTime() + days * DAY + hours * HOUR + minutes * MINUTE);
 
   return targetDate;
 };
@@ -22,7 +26,7 @@ const generatePairDates = () => {
 
   const minutes = getRandomIntInRange(0, 60) * MINUTE;
   const hours = getRandomIntInRange(0, 24) * HOUR;
-  const days = getRandomIntInRange(0, 3) * DAY;
+  const days = getRandomIntInRange(0, endDateMaximumDayOffset) * DAY;
 
   const second = new Date(first.getTime() + minutes + hours + days);
 

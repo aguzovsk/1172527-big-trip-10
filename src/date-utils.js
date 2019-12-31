@@ -6,19 +6,22 @@ export const MINUTE = 60 * SECOND;
 export const HOUR = 60 * MINUTE;
 export const DAY = 24 * HOUR;
 
-export const getTime = (date) => `${date.getHours()}:${date.getMinutes()}`;
+export const getYearMonthDay = (date) => date.toISOString().split('T')[0];
+export const getMonthDay = (date) => date.toDateString().split(` `).slice(1, 3).join(` `);
+export const getHourMinute = (date) => `${date.getHours()}:${date.getMinutes()}`;
 
 export const convertDateToDatetime = (date) => {
-  const day = date.toISOString().split('T')[0];
-  const time = getTime(date);
+  const day = getYearMonthDay(date);
+  const time = getHourMinute(date);
   return `${day}T${time}`;
 };
 
 export const getDateDiff = (startDate, endDate) => {
   const min = Math.min(startDate, endDate);
   const max = Math.max(startDate, endDate);
-
+  
   const diff = max - min;
+
   const diffDays = Math.ceil(diff / DAY);
   const diffHours = Math.ceil((diff % DAY) / HOUR);
   const diffMinutes = Math.ceil((diff % HOUR) / MINUTE);

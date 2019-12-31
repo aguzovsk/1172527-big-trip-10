@@ -17,7 +17,7 @@ export const offerTypes = [
     name: `Activity`,
     types: [
       `check-in`,
-      `sightening`,
+      `sightseeing`,
       `restaurant`
     ]
   }
