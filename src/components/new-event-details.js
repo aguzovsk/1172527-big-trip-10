@@ -3,7 +3,7 @@ const createImageMarkup =
     `<img class="event__photo" src="${image}" alt="${description}"></img>`;
 
 const showImages =
-  (images) => images.map((image) => createImageMarkup(image)).join(`\n`);
+  (images) => images.map(createImageMarkup).join(`\n`);
 
 const showOffer = (offer) => {
   const {name, description, price} = offer;

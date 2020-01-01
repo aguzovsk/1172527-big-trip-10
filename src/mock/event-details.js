@@ -54,7 +54,7 @@ const generateEventData = (destinationName) => {
 };
 
 const generateEventList = () => {
-  return new Array(LENGTH).fill(``).map(() => generateEventData());
+  return new Array(LENGTH).fill(``).map(generateEventData);
 };
 
 export {generateEventList, generateEventData};
