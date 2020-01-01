@@ -27,7 +27,7 @@ const generateImageDescription = () => {
   return sentences[index];
 };
 
-const generatePicturesWithDscription = () => {
+const generatePicturesWithDescription = () => {
   const images = generateImages();
   const pictures = images.map((image) => (
     {
@@ -44,19 +44,8 @@ const generateDestination = (givenName) => {
   return {
     name,
     description: generateDestinationDescription(),
-    pictures: generatePicturesWithDscription()
+    pictures: generatePicturesWithDescription()
   };
 };
 
-const generateDestinationList = (names) => {
-  let array;
-  if (names && names.length) {
-    array = names.map((name) => generateDestination(name));
-  } else {
-    const size = getRandomIntInRange(5, 8);
-    array = new Array(size).fill(``).map(() => generateDestination());
-  }
-  return array;
-};
-
-export {generateDestinationList, generateDestination};
+export {generateDestination};
