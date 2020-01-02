@@ -6,7 +6,7 @@ export const MINUTE = 60 * SECOND;
 export const HOUR = 60 * MINUTE;
 export const DAY = 24 * HOUR;
 
-export const getYearMonthDay = (date) => date.toISOString().split('T')[0];
+export const getYearMonthDay = (date) => date.toISOString().split(`T`)[0];
 export const getMonthDay = (date) => date.toDateString().split(` `).slice(1, 3).join(` `);
 export const getHourMinute = (date) => `${date.getHours()}:${date.getMinutes()}`;
 
@@ -19,7 +19,7 @@ export const convertDateToDatetime = (date) => {
 export const getDateDiff = (startDate, endDate) => {
   const min = Math.min(startDate, endDate);
   const max = Math.max(startDate, endDate);
-  
+
   const diff = max - min;
 
   const diffDays = Math.ceil(diff / DAY);
@@ -28,15 +28,15 @@ export const getDateDiff = (startDate, endDate) => {
 
   const queue = [];
   if (diffDays > 0) {
-    const days = formatDecimal(diffDays) + 'D';
+    const days = formatDecimal(diffDays) + `D`;
     queue.push(days);
   }
   if (diffHours > 0) {
-    const hours = formatDecimal(diffHours) + 'H';
+    const hours = formatDecimal(diffHours) + `H`;
     queue.push(hours);
   }
   if (diffMinutes > 0) {
-    const minutes = formatDecimal(diffMinutes) + 'M';
+    const minutes = formatDecimal(diffMinutes) + `M`;
     queue.push(minutes);
   }
 
