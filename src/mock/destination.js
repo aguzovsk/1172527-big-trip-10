@@ -48,4 +48,15 @@ const generateDestination = (givenName) => {
   };
 };
 
-export {generateDestination};
+const generateDestinationList = (names) => {
+  let array;
+  if (names && names.length) {
+    array = names.map(generateDestination);
+  } else {
+    const size = getRandomIntInRange(5, 8);
+    array = new Array(size).fill(``).map(generateDestination);
+  }
+  return array;
+};
+
+export {generateDestinationList, generateDestination};

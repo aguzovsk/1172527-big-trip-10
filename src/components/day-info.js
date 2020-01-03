@@ -1,11 +1,11 @@
-import {getMonthDay} from '../date-utils.js';
+import {getMonthDay, convertDateToDatetime} from '../date-utils.js';
 
-export const createDayInfo = (counter, dayOfYear) => {
-  const monthDay = getMonthDay(new Date(dayOfYear));
+export const createDayInfo = (counter, date) => {
   return (
-    `<div class="day__info">
-      <span class="day__counter">${counter}</span>
-      <time class="day__date" datetime="${dayOfYear}">${monthDay}</time>
+    `<div class="day__info"> ${counter ?
+      `<span class="day__counter">${counter}</span>
+      <time class="day__date" datetime="${convertDateToDatetime(date)}">${getMonthDay(date)}</time>`
+      : ``}
     </div>`
   );
 };

@@ -1,26 +1,29 @@
-import {getYearMonthDay} from '../date-utils.js';
+import {isSameDay} from '../date-utils.js';
 import {createDayMarkup} from './day.js';
 
-export const createDaysContainer = (eventList) => {
-  const map = new Map();
-  eventList.forEach((event) => {
-    const date = getYearMonthDay(event.dateFrom);
-    let array = map.get(date);
-    if (!array) {
-      array = [];
-      map.set(date, array);
-    }
-    array.push(event);
-  });
+export const createDaysContainer = (eventList, noDays) => {
+  if (!eventList.length) {
+    return ``;
+  }
 
-  const sortedArray = Array.from(map).sort((a, b) => a[0] > b[0] ? 1 : -1);
-  let counter = 1;
+  const array = [[eventList[0]]];
+  for (let i = 1; i < eventList.length; ++i) {
+    const event = eventList[i];
+    const prevArr = array[array.length - 1];
+    const prevEvent = prevArr[prevArr.length - 1];
+    if (noDays || isSameDay(event.dateFrom, prevEvent.dateFrom)) {
+      prevArr.push(event);
+    } else {
+      array.push([event]);
+    }
+  }
 
   return (
     `<ul class="trip-days">
-      ${sortedArray.map((keyValue) =>
-      createDayMarkup(counter++, keyValue[0], keyValue[1]))
-          .join(`\n`)
+      ${
+    array.map((eventArray, idx) =>
+      createDayMarkup(eventArray, !noDays ? idx + 1 : undefined)
+    ).join(`\n`)
     }
     </ul>`
   );

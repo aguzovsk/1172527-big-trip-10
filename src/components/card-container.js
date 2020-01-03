@@ -1,7 +1,7 @@
-import {createCardTemplate} from "./card";
+import {createCardTemplate} from "./card.js";
 
 export const createCardContainer = (eventList) => {
-  const cardList = eventList.sort((a, b) => a.dateFrom - b.dateFrom)
+  const cardList = eventList
   .map(createCardTemplate).join(`\n`);
 
   return (

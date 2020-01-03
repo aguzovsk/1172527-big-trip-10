@@ -48,6 +48,6 @@ destinationInput.addEventListener(`input`, (evt) => {
 const eventItemList = newEvent.querySelectorAll(`.event__type-item`);
 const eventIcon = newEvent.querySelector(`.event__type-icon`);
 eventItemList.forEach((item) => item.addEventListener(`click`, function () {
-  const type = this.querySelector(`input`).value;
+  const type = item.querySelector(`input`).value;
   eventIcon.src = `img/icons/${type}.png`;
 }));

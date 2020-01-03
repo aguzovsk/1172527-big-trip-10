@@ -9,6 +9,8 @@ export const DAY = 24 * HOUR;
 export const getYearMonthDay = (date) => date.toISOString().split(`T`)[0];
 export const getMonthDay = (date) => date.toDateString().split(` `).slice(1, 3).join(` `);
 export const getHourMinute = (date) => `${date.getHours()}:${date.getMinutes()}`;
+export const isSameDay = (date1, date2) => date1.getDate() === date2.getDate() &&
+  date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear();
 
 export const convertDateToDatetime = (date) => {
   const day = getYearMonthDay(date);

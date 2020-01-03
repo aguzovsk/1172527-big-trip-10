@@ -1,20 +1,22 @@
 import {getMonthDay} from "../date-utils.js";
-import { formatDecimal } from "../util.js";
+import {formatDecimal} from "../util.js";
 
 const last = (array) => array[array.length - 1];
 
 export const createRouteTemplate = (eventList) => {
-  if (!eventList.length) return ``;
-  
+  if (!eventList.length) {
+    return ``;
+  }
+
   const queue = [];
   const citiesVisited = eventList.reduce((arr, {destination}) =>
     last(arr) === destination.name ? arr : arr.concat(destination.name),
-    [eventList[0].destination.name]
+  [eventList[0].destination.name]
   );
 
   queue.push(citiesVisited[0]);
   queue.push(last(citiesVisited));
-  
+
   if (citiesVisited.length >= 3) {
     queue.splice(1, 0, citiesVisited.length === 3 ? citiesVisited[1] : `...`);
   }
@@ -25,8 +27,8 @@ export const createRouteTemplate = (eventList) => {
   const start = getMonthDay(startDate);
   const end = startDate.getFullYear() === endDate.getFullYear() &&
     startDate.getMonth() === endDate.getMonth() ?
-    formatDecimal(endDate.getDate()) : getMonthDay(endDate); 
-  
+    formatDecimal(endDate.getDate()) : getMonthDay(endDate);
+
   return (
     `<div class="trip-info__main">
       <h1 class="trip-info__title">${title}</h1>

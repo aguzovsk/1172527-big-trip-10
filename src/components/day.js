@@ -1,10 +1,10 @@
 import {createDayInfo} from './day-info.js';
 import {createCardContainer} from './card-container.js';
 
-export const createDayMarkup = (counter, dayOfYear, events) => {
+export const createDayMarkup = (events, counter) => {
   return (
     `<li class="trip-days__item  day">
-      ${createDayInfo(counter, dayOfYear)}
+      ${createDayInfo(counter, events[0].dateFrom)}
       
       ${createCardContainer(events)}
     </li>`
