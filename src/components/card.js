@@ -1,20 +1,7 @@
 import {getHourMinute, convertDateToDatetime, getDateDiff} from '../date-utils.js';
-import {offerTypes} from '../const.js';
-import {capitalize} from '../util.js';
-
-const getTypeText = (type, {name}) => {
-  const activityTypes = offerTypes.find((obj) => obj.name === `Activity`).types;
-  const isActivity = activityTypes.indexOf(type) !== -1;
-  if (!isActivity) {
-    return `${capitalize(type)} to ${name}`;
-  } else {
-    switch (type) {
-      case `check-in`: return `Check in hotel`;
-      case `sightseeing`: return `Sightseeing at ${name}`;
-      default: return capitalize(type);
-    }
-  }
-};
+import CardEditComponent from './new-event.js';
+import {getTypeText} from '../util.js';
+import {createElement} from '../util.js';
 
 const createEventOfferMarkup = (offer) => {
   const {description, price} = offer;
@@ -30,7 +17,7 @@ const createEventOfferMarkup = (offer) => {
 const showOffers =
   (offerList) => offerList.map(createEventOfferMarkup).join(`\n`);
 
-export const createCardTemplate = (event) => {
+const createCardTemplate = (event) => {
   const {type, basePrice, dateFrom, dateTo, offers, destination} = event;
   const totalPrice = basePrice + offers.reduce((acc, {price}) => acc + price, 0);
   const start = convertDateToDatetime(dateFrom);
@@ -43,7 +30,7 @@ export const createCardTemplate = (event) => {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${getTypeText(type, destination)}</h3>
+        <h3 class="event__title">${getTypeText(type)} ${destination.name}</h3>
 
         <div class="event__schedule">
           <p class="event__time">
@@ -70,3 +57,44 @@ export const createCardTemplate = (event) => {
     </li>`
   );
 };
+
+export default class CardComponent {
+  constructor(event, parent) {
+    this._element = null;
+    this._event = event;
+    this._cardEdit = null;
+    this._parent = parent;
+  }
+
+  getTemplate() {
+    return createCardTemplate(this._event);
+  }
+
+  setEditEventHandler() {
+    const button = this._element.querySelector(`.event__rollup-btn`);
+    const parent = this._parent;
+    button.addEventListener(`click`, () =>
+      parent.replaceCardToEdit(this, this._cardEdit)
+    );
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+      this._cardEdit = new CardEditComponent(this._event, this, this._parent);
+      this.setEditEventHandler();
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+  clear() {
+    this._element = null;
+    this._event = null;
+    this._cardEdit = null;
+  }
+}

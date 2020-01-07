@@ -1,5 +1,6 @@
 import {getMonthDay} from "../date-utils.js";
 import {formatDecimal} from "../util.js";
+import {createElement} from '../util.js';
 
 const last = (array) => array[array.length - 1];
 
@@ -37,3 +38,31 @@ export const createRouteTemplate = (eventList) => {
     </div>`
   );
 };
+
+export default class RouteComponent {
+  constructor(eventList) {
+    this._element = null;
+    this._eventList = eventList;
+  }
+
+  getTemplate() {
+    return createRouteTemplate(this._eventList);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+  clear() {
+    this._element = null;
+    this._eventList = null;
+  }
+}

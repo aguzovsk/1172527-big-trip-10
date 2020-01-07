@@ -1,3 +1,5 @@
+import {createElement} from '../util.js';
+
 const nameList = [`Table`, `Stats`];
 
 const createMenuButtonMarkup = (name, isActive, reference = `#`) => {
@@ -12,10 +14,32 @@ const showTabs = (names) =>
       (name, idx) => createMenuButtonMarkup(name, idx === 0)
   ).join(`\n`);
 
-export const createMenuTemplate = () => {
+const createMenuTemplate = () => {
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">
       ${showTabs(nameList)}
     </nav>`
   );
 };
+
+export default class MenuComponent {
+  constructor() {
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createMenuTemplate();
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

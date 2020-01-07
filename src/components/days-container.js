@@ -1,30 +1,65 @@
 import {isSameDay} from '../date-utils.js';
-import {createDayMarkup} from './day.js';
+import DayComponent from './day.js';
+import {createElement, render, RenderPosition} from '../util.js';
 
-export const createDaysContainer = (eventList, noDays) => {
-  if (!eventList.length) {
-    return ``;
+export default class DaysContainer {
+  constructor(scope, eventList, noDays) {
+    this._scope = scope;
+    this._element = null;
+    this._eventList = eventList;
+    this._noDays = noDays;
   }
 
-  const array = [[eventList[0]]];
-  for (let i = 1; i < eventList.length; ++i) {
-    const event = eventList[i];
-    const prevArr = array[array.length - 1];
-    const prevEvent = prevArr[prevArr.length - 1];
-    if (noDays || isSameDay(event.dateFrom, prevEvent.dateFrom)) {
-      prevArr.push(event);
-    } else {
-      array.push([event]);
+  _computeDaysList(eventList) {
+    if (!eventList.length) {
+      return [];
     }
+
+    const array = [[eventList[0]]];
+    for (let i = 1; i < eventList.length; ++i) {
+      const event = eventList[i];
+      const prevArr = array[array.length - 1];
+      const prevEvent = prevArr[prevArr.length - 1];
+      if (this._noDays || isSameDay(event.dateFrom, prevEvent.dateFrom)) {
+        prevArr.push(event);
+      } else {
+        array.push([event]);
+      }
+    }
+
+    return array.map((eventArray, idx) =>
+      new DayComponent(this._scope, eventArray, !this._noDays ? idx + 1 : this._noDays)
+    );
   }
 
-  return (
-    `<ul class="trip-days">
-      ${
-    array.map((eventArray, idx) =>
-      createDayMarkup(eventArray, !noDays ? idx + 1 : undefined)
-    ).join(`\n`)
+  getTemplate() {
+    return (
+      `<ul class="trip-days">
+      </ul>`
+    );
+  }
+
+  _initInternals() {
+    const days = this._computeDaysList(this._eventList);
+    days.forEach((day) => render(this._element, day.getElement(), RenderPosition.BEFOREEND));
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+      this._initInternals();
     }
-    </ul>`
-  );
-};
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+
+  clear() {
+    this._element = null;
+    this._eventList = null;
+    this._noDays = null;
+  }
+}
