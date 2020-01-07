@@ -131,28 +131,17 @@ export default class CardEditComponent {
   _setEventHandlers() {
     const form = this._element;
     const parent = this._parent;
-    const document = this._element.ownerDocument;
 
     form.addEventListener(`submit`, () => {
       parent.replaceEditToCard(this, this._card);
+      this._card.unattachEscapeHandler();
       return false;
     });
 
     form.addEventListener(`reset`, () => {
+      this._card.unattachEscapeHandler();
       parent.replaceEditToCard(this, this._card);
     });
-
-    document.addEventListener(`keydown`, this.onEscKeyDown.bind(this));
-  }
-
-  onEscKeyDown(evt) {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-    const document = this._element.ownerDocument;
-
-    if (isEscKey) {
-      this._parent.replaceEditToCard(this, this._card);
-      document.removeEventListener(`keydown`, this.onEscKeyDown);
-    }
   }
 
   getElement() {

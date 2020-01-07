@@ -64,19 +64,34 @@ export default class CardComponent {
     this._event = event;
     this._cardEdit = null;
     this._parent = parent;
+    this._onEscKeyDownBinded = this.onEscKeyDown.bind(this);
   }
 
   getTemplate() {
     return createCardTemplate(this._event);
   }
 
+  unattachEscapeHandler() {
+    document.removeEventListener(`keydown`, this._onEscKeyDownBinded);
+  }
+
+  onEscKeyDown(evt) {
+    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
+
+    if (isEscKey) {
+      this._parent.replaceEditToCard(this._cardEdit, this);
+      this.unattachEscapeHandler();
+    }
+  }
+
   setEditEventHandler() {
     const button = this._element.querySelector(`.event__rollup-btn`);
     const parent = this._parent;
-    
+
     button.addEventListener(`click`, () => {
-      const document = this._element.ownerDocument;
       parent.replaceCardToEdit(this, this._cardEdit);
+
+      document.addEventListener(`keydown`, this._onEscKeyDownBinded);
     });
   }
 
