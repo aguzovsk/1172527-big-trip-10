@@ -73,9 +73,11 @@ export default class CardComponent {
   setEditEventHandler() {
     const button = this._element.querySelector(`.event__rollup-btn`);
     const parent = this._parent;
-    button.addEventListener(`click`, () =>
-      parent.replaceCardToEdit(this, this._cardEdit)
-    );
+    
+    button.addEventListener(`click`, () => {
+      const document = this._element.ownerDocument;
+      parent.replaceCardToEdit(this, this._cardEdit);
+    });
   }
 
   getElement() {

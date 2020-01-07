@@ -2,10 +2,9 @@ import CardComponent from "./card.js";
 import {createElement, render, RenderPosition} from '../util.js';
 
 export default class CardListComponent {
-  constructor(scope, list) {
+  constructor(list) {
     this._element = null;
     this._cardList = list.map((event) => new CardComponent(event, this));
-    this._scope = scope;
   }
 
   getTemplate() {

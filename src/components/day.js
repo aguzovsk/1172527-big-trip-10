@@ -16,11 +16,11 @@ const createDayMarkup = (counter, date) => {
 };
 
 export default class DayComponent {
-  constructor(scope, events, counter) {
+  constructor(events, counter) {
     this._element = null;
     this._date = events[0].dateFrom;
     this._counter = counter;
-    this._cardList = new CardListComponent(scope, events);
+    this._cardList = new CardListComponent(events);
   }
 
   getTemplate() {

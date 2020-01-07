@@ -3,8 +3,7 @@ import DayComponent from './day.js';
 import {createElement, render, RenderPosition} from '../util.js';
 
 export default class DaysContainer {
-  constructor(scope, eventList, noDays) {
-    this._scope = scope;
+  constructor(eventList, noDays) {
     this._element = null;
     this._eventList = eventList;
     this._noDays = noDays;
@@ -28,7 +27,7 @@ export default class DaysContainer {
     }
 
     return array.map((eventArray, idx) =>
-      new DayComponent(this._scope, eventArray, !this._noDays ? idx + 1 : this._noDays)
+      new DayComponent(eventArray, !this._noDays ? idx + 1 : this._noDays)
     );
   }
 
