@@ -23,7 +23,7 @@ const showGroupsOfEventTypes = (groups, selected) =>
       ${group.types.map((type) => showEventType(type, type === selected)).join(`\n`)}
     </fieldset>`
   ))
-  .join(`\n`);
+    .join(`\n`);
 
 const showOffer = (offer) => {
   const {name, description, price} = offer;
@@ -104,10 +104,10 @@ export const createNewEventTemplate = (event) => {
           <div class="event__photos-container">
             <div class="event__photos-tape">
               ${pictures.map(
-        ({image, description: imgDescription}) =>
-          `<img class="event__photo" src="${image}" alt="${imgDescription}"></img>`
+      ({image, description: imgDescription}) =>
+        `<img class="event__photo" src="${image}" alt="${imgDescription}"></img>`
     )
-              .join(`\n`)}
+      .join(`\n`)}
             </div>
           </div>
         </section>

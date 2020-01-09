@@ -18,7 +18,7 @@ const generateDestinationDescription = () => {
 const generateImages = () => {
   const number = getRandomIntInRange(3, 8);
   return new Array(number).fill(``).map(
-      () => `http://picsum.photos/300/150?r=${Math.random()}`
+    () => `http://picsum.photos/300/150?r=${Math.random()}`
   );
 };
 

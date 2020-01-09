@@ -11,7 +11,7 @@ const createMenuButtonMarkup = (name, isActive, reference = `#`) => {
 
 const showTabs = (names) =>
   names.map(
-      (name, idx) => createMenuButtonMarkup(name, idx === 0)
+    (name, idx) => createMenuButtonMarkup(name, idx === 0)
   ).join(`\n`);
 
 const createMenuTemplate = () => {

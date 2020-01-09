@@ -20,7 +20,7 @@ render(tripControls.children[0], new MenuComponent().getElement(), RenderPositio
 render(tripControls, new FiltersComponent().getElement(), RenderPosition.BEFOREEND);
 
 const tripEvents = document.querySelector(`.trip-events`);
-render(tripEvents, new SortComponent().getElement());
+render(tripEvents, new SortComponent().getElement(), RenderPosition.BEFOREEND);
 
 if (!eventList.length) {
   render(tripEvents, new NoCardsComponent().getElement(), RenderPosition.BEFOREEND);
@@ -33,5 +33,3 @@ if (!eventList.length) {
   const sum = eventPrices.reduce((acc, {innerText}) => acc + parseInt(innerText, 10), 0);
   totalSum.innerText = sum;
 }
-
-
