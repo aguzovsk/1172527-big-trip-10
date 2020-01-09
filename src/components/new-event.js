@@ -1,10 +1,9 @@
-import {citiesList} from '../const.js';
 import {capitalize} from '../util.js';
-import {offerTypes} from '../const.js';
+import {offerTypes, mockCities} from '../const.js';
 import {createElement, getTypeText} from '../util.js';
 
-const createCitiesMarkup = (cityList) => {
-  return cityList
+const createCitiesMarkup = (cities) => {
+  return cities
     .map((city) => `<option value="${city}"></option>`)
     .join(`\n`);
 };
@@ -64,7 +63,7 @@ export const createNewEventTemplate = (event) => {
           </label>
           <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1" oninput="">
           <datalist id="destination-list-1">
-            ${createCitiesMarkup(citiesList)}
+            ${createCitiesMarkup(mockCities)}
           </datalist>
         </div>
 

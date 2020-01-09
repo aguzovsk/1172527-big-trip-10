@@ -6,26 +6,27 @@ import DaysContainerComponent from './components/days-container.js';
 import NoCardsComponent from './components/no-cards.js';
 import {generateEventList} from './mock/event-details.js';
 import {render, RenderPosition} from './util.js';
+import {menuNames, filterNames} from './const.js';
 
-const eventList = generateEventList();
-eventList.sort((a, b) => a.dateFrom - b.dateFrom);
+const events = generateEventList();
+events.sort((a, b) => a.dateFrom - b.dateFrom);
 
 const tripInfo = document.querySelector(`.trip-main__trip-info`);
-if (eventList.length) {
-  render(tripInfo, new RouteComponent(eventList).getElement(), RenderPosition.AFTERBEGIN);
+if (events.length) {
+  render(tripInfo, new RouteComponent(events).getElement(), RenderPosition.AFTERBEGIN);
 }
 
 const tripControls = document.querySelector(`.trip-main__trip-controls`);
-render(tripControls.children[0], new MenuComponent().getElement(), RenderPosition.AFTEREND);
-render(tripControls, new FiltersComponent().getElement(), RenderPosition.BEFOREEND);
+render(tripControls.children[0], new MenuComponent(menuNames).getElement(), RenderPosition.AFTEREND);
+render(tripControls, new FiltersComponent(filterNames).getElement(), RenderPosition.BEFOREEND);
 
 const tripEvents = document.querySelector(`.trip-events`);
 render(tripEvents, new SortComponent().getElement(), RenderPosition.BEFOREEND);
 
-if (!eventList.length) {
+if (!events.length) {
   render(tripEvents, new NoCardsComponent().getElement(), RenderPosition.BEFOREEND);
 } else {
-  const daysContainerComponent = new DaysContainerComponent(eventList, false).getElement();
+  const daysContainerComponent = new DaysContainerComponent(events, false).getElement();
   render(tripEvents, daysContainerComponent, RenderPosition.BEFOREEND);
 
   const totalSum = tripInfo.querySelector(`.trip-info__cost-value`);

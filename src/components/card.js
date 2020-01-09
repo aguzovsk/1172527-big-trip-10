@@ -15,7 +15,7 @@ const createEventOfferMarkup = (offer) => {
 };
 
 const showOffers =
-  (offerList) => offerList.map(createEventOfferMarkup).join(`\n`);
+  (offers) => offers.map(createEventOfferMarkup).join(`\n`);
 
 const createCardTemplate = (event) => {
   const {type, basePrice, dateFrom, dateTo, offers, destination} = event;

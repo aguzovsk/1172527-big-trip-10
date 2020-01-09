@@ -2,9 +2,9 @@ import CardComponent from "./card.js";
 import {createElement, render, RenderPosition} from '../util.js';
 
 export default class CardListComponent {
-  constructor(list) {
+  constructor(events) {
     this._element = null;
-    this._cardList = list.map((event) => new CardComponent(event, this));
+    this._events = events;
   }
 
   getTemplate() {
@@ -23,7 +23,8 @@ export default class CardListComponent {
   }
 
   _initInternals() {
-    this._cardList.forEach((card) =>
+    const cards = this._events.map((event) => new CardComponent(event, this));
+    cards.forEach((card) =>
       render(this._element, card.getElement(), RenderPosition.BEFOREEND)
     );
   }
@@ -43,6 +44,6 @@ export default class CardListComponent {
 
   clear() {
     this._element = null;
-    this._cardList = null;
+    this._events = null;
   }
 }

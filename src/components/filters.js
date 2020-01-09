@@ -1,8 +1,6 @@
 import {capitalize} from '../util.js';
 import {createElement} from '../util.js';
 
-const filterTypes = [`everything`, `future`, `past`];
-
 const createFilterMarkup = (type, isActive) => {
   const checked = isActive ? ` checked` : ``;
   return (
@@ -16,11 +14,11 @@ const createFilterMarkup = (type, isActive) => {
 const showFilters = (types) =>
   types.map((type, it) => createFilterMarkup(type, it === 0)).join(`\n`);
 
-const createFiltersTemplate = () => {
+const createFiltersTemplate = (filterNames) => {
   return (
     `<form class="trip-filters" action="#" method="get">
       
-      ${showFilters(filterTypes)}
+      ${showFilters(filterNames)}
 
       <button class="visually-hidden" type="submit">Accept filter</button>
     </form>`
@@ -28,12 +26,13 @@ const createFiltersTemplate = () => {
 };
 
 export default class FiltersComponent {
-  constructor() {
+  constructor(filterNames) {
     this._element = null;
+    this._filterNames = filterNames;
   }
 
   getTemplate() {
-    return createFiltersTemplate();
+    return createFiltersTemplate(this._filterNames);
   }
 
   getElement() {

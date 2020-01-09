@@ -1,33 +1,32 @@
-import {getMonthDay} from "../date-utils.js";
+import {getMonthDay, isSameMonth} from "../date-utils.js";
 import {formatDecimal} from "../util.js";
 import {createElement} from '../util.js';
 
-const last = (array) => array[array.length - 1];
+const getLast = (items) => items[items.length - 1];
 
-export const createRouteTemplate = (eventList) => {
-  if (!eventList.length) {
+export const createRouteTemplate = (events) => {
+  if (!events.length) {
     return ``;
   }
 
-  const queue = [];
-  const citiesVisited = eventList.reduce((arr, {destination}) =>
-    last(arr) === destination.name ? arr : arr.concat(destination.name),
-  [eventList[0].destination.name]
+  const items = [];
+  const citiesVisited = events.reduce((cities, {destination}) =>
+    getLast(cities) === destination.name ? cities : cities.concat(destination.name),
+  [events[0].destination.name]
   );
 
-  queue.push(citiesVisited[0]);
-  queue.push(last(citiesVisited));
+  items.push(citiesVisited[0]);
+  items.push(getLast(citiesVisited));
 
   if (citiesVisited.length >= 3) {
-    queue.splice(1, 0, citiesVisited.length === 3 ? citiesVisited[1] : `...`);
+    items.splice(1, 0, citiesVisited.length === 3 ? citiesVisited[1] : `...`);
   }
-  const title = queue.join(` &mdash; `);
+  const title = items.join(` &mdash; `);
 
-  const startDate = eventList[0].dateFrom;
-  const endDate = last(eventList).dateTo;
+  const startDate = events[0].dateFrom;
+  const endDate = getLast(events).dateTo;
   const start = getMonthDay(startDate);
-  const end = startDate.getFullYear() === endDate.getFullYear() &&
-    startDate.getMonth() === endDate.getMonth() ?
+  const end = isSameMonth(startDate, endDate) ?
     formatDecimal(endDate.getDate()) : getMonthDay(endDate);
 
   return (
@@ -40,13 +39,13 @@ export const createRouteTemplate = (eventList) => {
 };
 
 export default class RouteComponent {
-  constructor(eventList) {
+  constructor(events) {
     this._element = null;
-    this._eventList = eventList;
+    this._events = events;
   }
 
   getTemplate() {
-    return createRouteTemplate(this._eventList);
+    return createRouteTemplate(this._events);
   }
 
   getElement() {
@@ -63,6 +62,6 @@ export default class RouteComponent {
 
   clear() {
     this._element = null;
-    this._eventList = null;
+    this._events = null;
   }
 }

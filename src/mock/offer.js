@@ -1,6 +1,6 @@
 import {getShuffled, getRandomIntInRange} from '../util.js';
 
-const offerList = [
+const offers = [
   {
     name: `luggage`,
     description: `Add luggage`,
@@ -25,5 +25,5 @@ const offerList = [
 
 export const generateOfferList = () => {
   const max = getRandomIntInRange(0, 4);
-  return getShuffled(offerList).slice(0, max);
+  return getShuffled(offers).slice(0, max);
 };

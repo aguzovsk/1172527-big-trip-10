@@ -1,7 +1,5 @@
 import {createElement} from '../util.js';
 
-const nameList = [`Table`, `Stats`];
-
 const createMenuButtonMarkup = (name, isActive, reference = `#`) => {
   const activeClass = isActive ? ` trip-tabs__btn--active` : ``;
   return (
@@ -14,21 +12,22 @@ const showTabs = (names) =>
     (name, idx) => createMenuButtonMarkup(name, idx === 0)
   ).join(`\n`);
 
-const createMenuTemplate = () => {
+const createMenuTemplate = (names) => {
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">
-      ${showTabs(nameList)}
+      ${showTabs(names)}
     </nav>`
   );
 };
 
 export default class MenuComponent {
-  constructor() {
+  constructor(names) {
+    this._names = names;
     this._element = null;
   }
 
   getTemplate() {
-    return createMenuTemplate();
+    return createMenuTemplate(this._names);
   }
 
   getElement() {
@@ -40,6 +39,11 @@ export default class MenuComponent {
   }
 
   removeElement() {
+    this._element = null;
+  }
+
+  clear() {
+    this._names = null;
     this._element = null;
   }
 }

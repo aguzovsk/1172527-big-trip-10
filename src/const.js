@@ -1,5 +1,6 @@
-export const citiesList = [`Amsterdam`, `Geneva`, `Chamonix`, `Saint Petersburg`];
-export const cities = new Set(citiesList);
+export const mockCities = [`Amsterdam`, `Geneva`, `Chamonix`, `Saint Petersburg`];
+export const menuNames = [`Table`, `Stats`];
+export const filterNames = [`everything`, `future`, `past`];
 export const offerTypes = [
   {
     name: `Transfer`,

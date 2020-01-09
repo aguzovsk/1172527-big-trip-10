@@ -3,31 +3,31 @@ import DayComponent from './day.js';
 import {createElement, render, RenderPosition} from '../util.js';
 
 export default class DaysContainer {
-  constructor(eventList, noDays) {
+  constructor(events, noDays) {
     this._element = null;
-    this._eventList = eventList;
+    this._events = events;
     this._noDays = noDays;
   }
 
-  _computeDaysList(eventList) {
-    if (!eventList.length) {
+  _computeDaysList(events) {
+    if (!events.length) {
       return [];
     }
 
-    const array = [[eventList[0]]];
-    for (let i = 1; i < eventList.length; ++i) {
-      const event = eventList[i];
-      const prevArr = array[array.length - 1];
-      const prevEvent = prevArr[prevArr.length - 1];
+    const days = [[events[0]]];
+    for (let i = 1; i < events.length; ++i) {
+      const event = events[i];
+      const prevDay = days[days.length - 1];
+      const prevEvent = prevDay[prevDay.length - 1];
       if (this._noDays || isSameDay(event.dateFrom, prevEvent.dateFrom)) {
-        prevArr.push(event);
+        prevDay.push(event);
       } else {
-        array.push([event]);
+        days.push([event]);
       }
     }
 
-    return array.map((eventArray, idx) =>
-      new DayComponent(eventArray, !this._noDays ? idx + 1 : this._noDays)
+    return days.map((day, idx) =>
+      new DayComponent(day, !this._noDays ? idx + 1 : this._noDays)
     );
   }
 
@@ -39,7 +39,7 @@ export default class DaysContainer {
   }
 
   _initInternals() {
-    const days = this._computeDaysList(this._eventList);
+    const days = this._computeDaysList(this._events);
     days.forEach((day) => render(this._element, day.getElement(), RenderPosition.BEFOREEND));
   }
 
@@ -58,7 +58,7 @@ export default class DaysContainer {
 
   clear() {
     this._element = null;
-    this._eventList = null;
+    this._events = null;
     this._noDays = null;
   }
 }
