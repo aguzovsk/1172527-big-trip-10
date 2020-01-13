@@ -1,5 +1,5 @@
 import NoCardsComponent from "../components/no-cards";
-import SortComponent from "../components/sort";
+import SortComponent, {SortTypes} from "../components/sort";
 import DaysContainer from "../components/days-container";
 import DayComponent from '../components/day.js';
 import {render, RenderPosition} from '../utils/render.js';
@@ -11,28 +11,58 @@ export default class TripController {
     this._noCardsComponent = new NoCardsComponent();
     this._sortComponent = new SortComponent();
     this._daysContainerComponent = new DaysContainer();
-    this._noDays = false;
   }
 
   render(events) {
     const container = this._container;
-    render(container, this._sortComponent.getElement(), RenderPosition.BEFOREEND);
-
     if (!events.length) {
       render(container, this._noCardsComponent.getElement(), RenderPosition.BEFOREEND);
-    } else {
-      const daysContainerComponent = this._daysContainerComponent;
-      const days = this._computeDaysList(events);
-      const daysContainerElement = daysContainerComponent.getElement();
+      return;
+    }
+    const daysContainerElement = this._daysContainerComponent.getElement();
+    render(container, this._sortComponent.getElement(), RenderPosition.BEFOREEND);
+    render(container, daysContainerElement, RenderPosition.BEFOREEND);
+
+    const computeDays = this._computeDaysList.bind(this);
+    const computedDays = computeDays(events, false);
+    computedDays.forEach((day) =>
+      render(daysContainerElement, day.getElement(), RenderPosition.BEFOREEND));
+
+    this._sortComponent.setEventHandlers((sortType) => {
+      switch (sortType) {
+        case SortTypes.BY_EVENT:
+          events.sort((a, b) => a.dateFrom - b.dateFrom);
+          break;
+        case SortTypes.BY_PRICE:
+          events.sort((a, b) => {
+            const aPrice = a.offers.reduce((acc, {price}) => acc + price, 0) +
+              a.basePrice;
+            const bPrice = b.offers.reduce((acc, {price}) => acc + price, 0) +
+              b.basePrice;
+            return bPrice - aPrice;
+          });
+          break;
+        case SortTypes.BY_TIME:
+          events.sort((a, b) => {
+            const aTime = a.dateTo - a.dateFrom;
+            const bTime = b.dateTo - b.dateFrom;
+            return bTime - aTime;
+          });
+          break;
+      }
+
+      daysContainerElement.innerHTML = ``;
+
+      const days = computeDays(events, sortType !== SortTypes.BY_EVENT);
       days.forEach((day) =>
         render(daysContainerElement, day.getElement(), RenderPosition.BEFOREEND));
-      render(container, daysContainerElement, RenderPosition.BEFOREEND);
-    }
+    });
   }
 
-  _computeDaysList(events) {
-    if (!events.length) {
-      return [];
+  _computeDaysList(events, noDays) {
+    if (!events.length || noDays) {
+      const day = new DayComponent(events, 0);
+      return [day];
     }
 
     const days = [[events[0]]];
@@ -40,7 +70,7 @@ export default class TripController {
       const event = events[i];
       const prevDay = days[days.length - 1];
       const prevEvent = prevDay[prevDay.length - 1];
-      if (this._noDays || isSameDay(event.dateFrom, prevEvent.dateFrom)) {
+      if (isSameDay(event.dateFrom, prevEvent.dateFrom)) {
         prevDay.push(event);
       } else {
         days.push([event]);
@@ -48,7 +78,7 @@ export default class TripController {
     }
 
     return days.map((day, idx) =>
-      new DayComponent(day, !this._noDays ? idx + 1 : this._noDays)
+      new DayComponent(day, idx + 1)
     );
   }
 }
