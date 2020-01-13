@@ -1,4 +1,4 @@
-import {formatDecimal} from './util.js';
+import {formatDecimal} from './common.js';
 
 const MILLISECOND = 1;
 const SECOND = 1000 * MILLISECOND;

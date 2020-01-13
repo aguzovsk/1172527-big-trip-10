@@ -1,6 +1,6 @@
-import {getMonthDay, convertDateToDatetime} from '../date-utils.js';
+import {getMonthDay, convertDateToDatetime} from '../utils/date-utils.js';
 import CardListComponent from './card-container.js';
-import {createElement, render, RenderPosition} from '../util.js';
+import {createElement, render, RenderPosition} from '../utils/render.js';
 
 const createDayMarkup = (counter, date) => {
   return (

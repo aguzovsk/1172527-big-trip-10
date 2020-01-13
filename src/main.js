@@ -5,7 +5,7 @@ import SortComponent from './components/sort.js';
 import DaysContainerComponent from './components/days-container.js';
 import NoCardsComponent from './components/no-cards.js';
 import {generateEventList} from './mock/event-details.js';
-import {render, RenderPosition} from './util.js';
+import {render, RenderPosition} from './utils/render.js';
 import {menuNames, filterNames} from './const.js';
 
 const events = generateEventList();

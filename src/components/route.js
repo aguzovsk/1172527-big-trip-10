@@ -1,6 +1,6 @@
-import {getMonthDay, isSameMonth} from "../date-utils.js";
-import {formatDecimal} from "../util.js";
-import {createElement} from '../util.js';
+import {getMonthDay, isSameMonth} from "../utils/date-utils.js";
+import {formatDecimal} from "../utils/common.js";
+import {createElement} from '../utils/render.js';
 
 const getLast = (items) => items[items.length - 1];
 

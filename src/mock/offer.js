@@ -1,4 +1,4 @@
-import {getShuffled, getRandomIntInRange} from '../util.js';
+import {getShuffled, getRandomIntInRange} from '../utils/common.js';
 
 const offers = [
   {

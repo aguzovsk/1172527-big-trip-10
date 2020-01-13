@@ -1,4 +1,4 @@
-import {createElement} from '../util.js';
+import {createElement} from '../utils/render.js';
 
 const createMenuButtonMarkup = (name, isActive, reference = `#`) => {
   const activeClass = isActive ? ` trip-tabs__btn--active` : ``;

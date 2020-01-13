@@ -1,5 +1,5 @@
-import {capitalize} from '../util.js';
-import {createElement} from '../util.js';
+import {capitalize} from '../utils/common.js';
+import {createElement} from '../utils/render.js';
 
 const createFilterMarkup = (type, isActive) => {
   const checked = isActive ? ` checked` : ``;

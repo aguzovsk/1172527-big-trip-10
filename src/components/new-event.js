@@ -1,6 +1,6 @@
-import {capitalize} from '../util.js';
+import {capitalize, getTypeText} from '../utils/common.js';
 import {offerTypes, mockCities} from '../const.js';
-import {createElement, getTypeText} from '../util.js';
+import {createElement} from '../utils/render.js';
 
 const createCitiesMarkup = (cities) => {
   return cities

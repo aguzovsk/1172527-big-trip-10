@@ -1,4 +1,4 @@
-import {offerTypes} from './const.js';
+import {offerTypes} from '../const.js';
 
 export const getShuffled = (input) => {
   const items = input.slice();
@@ -27,30 +27,3 @@ export const capitalize =
   (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
 export const formatDecimal = (dec) => dec < 10 ? `0${dec}` : `${dec}`;
-
-export const createElement = (template) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
-
-export const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  AFTEREND: `afterend`,
-  BEFOREEND: `beforeend`
-};
-
-export const render = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-    case RenderPosition.AFTEREND:
-      container.insertAdjacentElement(RenderPosition.AFTEREND, element);
-      break;
-  }
-};

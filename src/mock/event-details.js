@@ -1,5 +1,5 @@
-import {getRandomIntInRange} from '../util.js';
-import {MINUTE, HOUR, DAY} from '../date-utils.js';
+import {getRandomIntInRange} from '../utils/common.js';
+import {MINUTE, HOUR, DAY} from '../utils/date-utils.js';
 import {offerTypes} from '../const.js';
 import {generateDestination} from './destination.js';
 import {generateOfferList} from './offer.js';

@@ -1,6 +1,6 @@
-import {isSameDay} from '../date-utils.js';
+import {isSameDay} from '../utils/date-utils.js';
 import DayComponent from './day.js';
-import {createElement, render, RenderPosition} from '../util.js';
+import {createElement, render, RenderPosition} from '../utils/render.js';
 
 export default class DaysContainer {
   constructor(events, noDays) {

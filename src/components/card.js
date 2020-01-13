@@ -1,7 +1,7 @@
-import {getHourMinute, convertDateToDatetime, getDateDiff} from '../date-utils.js';
+import {getHourMinute, convertDateToDatetime, getDateDiff} from '../utils/date-utils.js';
 import CardEditComponent from './new-event.js';
-import {getTypeText} from '../util.js';
-import {createElement} from '../util.js';
+import {getTypeText} from '../utils/common.js';
+import {createElement} from '../utils/render.js';
 
 const createEventOfferMarkup = (offer) => {
   const {description, price} = offer;

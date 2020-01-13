@@ -1,5 +1,5 @@
 import CardComponent from "./card.js";
-import {createElement, render, RenderPosition} from '../util.js';
+import {createElement, render, RenderPosition} from '../utils/render.js';
 
 export default class CardListComponent {
   constructor(events) {
