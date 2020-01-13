@@ -1,5 +1,5 @@
 import {capitalize} from '../utils/common.js';
-import {createElement} from '../utils/render.js';
+import AbstractComponent from './abstract-component.js';
 
 const createFilterMarkup = (type, isActive) => {
   const checked = isActive ? ` checked` : ``;
@@ -25,25 +25,13 @@ const createFiltersTemplate = (filterNames) => {
   );
 };
 
-export default class FiltersComponent {
+export default class FiltersComponent extends AbstractComponent {
   constructor(filterNames) {
-    this._element = null;
+    super();
     this._filterNames = filterNames;
   }
 
   getTemplate() {
     return createFiltersTemplate(this._filterNames);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

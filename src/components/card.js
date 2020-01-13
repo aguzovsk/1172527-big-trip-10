@@ -1,7 +1,7 @@
 import {getHourMinute, convertDateToDatetime, getDateDiff} from '../utils/date-utils.js';
 import CardEditComponent from './new-event.js';
 import {getTypeText} from '../utils/common.js';
-import {createElement} from '../utils/render.js';
+import AbstractComponentWithInit from './abstract-component-with-init.js';
 
 const createEventOfferMarkup = (offer) => {
   const {description, price} = offer;
@@ -58,9 +58,9 @@ const createCardTemplate = (event) => {
   );
 };
 
-export default class CardComponent {
+export default class CardComponent extends AbstractComponentWithInit {
   constructor(event, parent) {
-    this._element = null;
+    super();
     this._event = event;
     this._cardEdit = null;
     this._parent = parent;
@@ -95,23 +95,8 @@ export default class CardComponent {
     });
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-      this._cardEdit = new CardEditComponent(this._event, this, this._parent);
-      this.setEditEventHandler();
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
-  clear() {
-    this._element = null;
-    this._event = null;
-    this._cardEdit = null;
+  _init() {
+    this._cardEdit = new CardEditComponent(this._event, this, this._parent);
+    this.setEditEventHandler();
   }
 }

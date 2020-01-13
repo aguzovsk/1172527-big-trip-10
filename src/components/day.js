@@ -1,6 +1,7 @@
 import {getMonthDay, convertDateToDatetime} from '../utils/date-utils.js';
 import CardListComponent from './card-container.js';
-import {createElement, render, RenderPosition} from '../utils/render.js';
+import {render, RenderPosition} from '../utils/render.js';
+import AbstractComponentWithInit from './abstract-component-with-init.js';
 
 const createDayMarkup = (counter, date) => {
   return (
@@ -15,9 +16,9 @@ const createDayMarkup = (counter, date) => {
   );
 };
 
-export default class DayComponent {
+export default class DayComponent extends AbstractComponentWithInit {
   constructor(events, counter) {
-    this._element = null;
+    super();
     this._date = events[0].dateFrom;
     this._counter = counter;
     this._cardList = new CardListComponent(events);
@@ -27,23 +28,7 @@ export default class DayComponent {
     return createDayMarkup(this._counter, this._date);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-      render(this._element, this._cardList.getElement(), RenderPosition.BEFOREEND);
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
-  clear() {
-    this._element = null;
-    this._date = null;
-    this._counter = null;
-    this._cardList = null;
+  _init() {
+    render(this._element, this._cardList.getElement(), RenderPosition.BEFOREEND);
   }
 }

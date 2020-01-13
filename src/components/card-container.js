@@ -1,9 +1,10 @@
 import CardComponent from "./card.js";
-import {createElement, render, RenderPosition} from '../utils/render.js';
+import {render, RenderPosition} from '../utils/render.js';
+import AbstractComponentWithInit from "./abstract-component-with-init.js";
 
-export default class CardListComponent {
+export default class CardListComponent extends AbstractComponentWithInit {
   constructor(events) {
-    this._element = null;
+    super();
     this._events = events;
   }
 
@@ -22,28 +23,10 @@ export default class CardListComponent {
     this._element.replaceChild(task.getElement(), edit.getElement());
   }
 
-  _initInternals() {
+  _init() {
     const cards = this._events.map((event) => new CardComponent(event, this));
     cards.forEach((card) =>
       render(this._element, card.getElement(), RenderPosition.BEFOREEND)
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-      this._initInternals();
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
-  clear() {
-    this._element = null;
-    this._events = null;
   }
 }

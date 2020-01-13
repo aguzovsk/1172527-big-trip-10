@@ -1,6 +1,6 @@
 import {getMonthDay, isSameMonth} from "../utils/date-utils.js";
 import {formatDecimal} from "../utils/common.js";
-import {createElement} from '../utils/render.js';
+import AbstractComponent from "./abstract-component.js";
 
 const getLast = (items) => items[items.length - 1];
 
@@ -38,30 +38,13 @@ export const createRouteTemplate = (events) => {
   );
 };
 
-export default class RouteComponent {
+export default class RouteComponent extends AbstractComponent {
   constructor(events) {
-    this._element = null;
+    super();
     this._events = events;
   }
 
   getTemplate() {
     return createRouteTemplate(this._events);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
-  clear() {
-    this._element = null;
-    this._events = null;
   }
 }

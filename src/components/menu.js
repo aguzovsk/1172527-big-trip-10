@@ -1,4 +1,4 @@
-import {createElement} from '../utils/render.js';
+import AbstractComponent from './abstract-component.js';
 
 const createMenuButtonMarkup = (name, isActive, reference = `#`) => {
   const activeClass = isActive ? ` trip-tabs__btn--active` : ``;
@@ -20,30 +20,13 @@ const createMenuTemplate = (names) => {
   );
 };
 
-export default class MenuComponent {
+export default class MenuComponent extends AbstractComponent {
   constructor(names) {
+    super();
     this._names = names;
-    this._element = null;
   }
 
   getTemplate() {
     return createMenuTemplate(this._names);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
-  clear() {
-    this._names = null;
-    this._element = null;
   }
 }

@@ -1,10 +1,11 @@
 import {isSameDay} from '../utils/date-utils.js';
 import DayComponent from './day.js';
-import {createElement, render, RenderPosition} from '../utils/render.js';
+import {render, RenderPosition} from '../utils/render.js';
+import AbstractComponentWithInit from './abstract-component-with-init.js';
 
-export default class DaysContainer {
+export default class DaysContainer extends AbstractComponentWithInit {
   constructor(events, noDays) {
-    this._element = null;
+    super();
     this._events = events;
     this._noDays = noDays;
   }
@@ -38,27 +39,8 @@ export default class DaysContainer {
     );
   }
 
-  _initInternals() {
+  _init() {
     const days = this._computeDaysList(this._events);
     days.forEach((day) => render(this._element, day.getElement(), RenderPosition.BEFOREEND));
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-      this._initInternals();
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
-  clear() {
-    this._element = null;
-    this._events = null;
-    this._noDays = null;
   }
 }

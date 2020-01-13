@@ -1,27 +1,11 @@
-import {createElement} from '../utils/render.js';
+import AbstractComponent from './abstract-component.js';
 
-export default class NoCardsComponent {
-  constructor() {
-    this._element = null;
-  }
-
+export default class NoCardsComponent extends AbstractComponent {
   getTemplate() {
     return (
       `<p class="trip-events__msg">
         Click New Event to create your first point
       </p>`
     );
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

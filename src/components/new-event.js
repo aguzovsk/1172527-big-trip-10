@@ -1,6 +1,6 @@
 import {capitalize, getTypeText} from '../utils/common.js';
 import {offerTypes, mockCities} from '../const.js';
-import {createElement} from '../utils/render.js';
+import AbstractComponentWithInit from './abstract-component-with-init.js';
 
 const createCitiesMarkup = (cities) => {
   return cities
@@ -115,9 +115,9 @@ export const createNewEventTemplate = (event) => {
   );
 };
 
-export default class CardEditComponent {
+export default class CardEditComponent extends AbstractComponentWithInit {
   constructor(event, card, parent) {
-    this._element = null;
+    super();
     this._event = event;
     this._card = card;
     this._parent = parent;
@@ -143,21 +143,7 @@ export default class CardEditComponent {
     });
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-      this._setEventHandlers();
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
-  }
-
-  clear() {
-    this._element = null;
-    this._event = null;
+  _init() {
+    this._setEventHandlers();
   }
 }
