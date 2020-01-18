@@ -53,8 +53,7 @@ export default class SortComponent extends AbstractComponent {
 
   setEventHandlers(handler) {
     const element = this.getElement();
-    const inputs = element.querySelectorAll(`input`);
-    inputs.forEach((input) => input.addEventListener(`click`, (evt) => {
+    element.addEventListener(`change`, (evt) => {
       const selected = evt.target;
       if (selected.value === this._currentSortType) {
         return;
@@ -62,6 +61,6 @@ export default class SortComponent extends AbstractComponent {
 
       this._currentSortType = selected.value;
       handler(this._currentSortType);
-    }));
+    });
   }
 }

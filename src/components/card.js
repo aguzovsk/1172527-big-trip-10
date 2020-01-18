@@ -1,6 +1,6 @@
 import {getHourMinute, convertDateToDatetime, getDateDiff} from '../utils/date-utils.js';
 import CardEditComponent from './new-event.js';
-import {getTypeText} from '../utils/common.js';
+import {getTypeText, getEventTotalPrice} from '../utils/common.js';
 import AbstractComponentWithInit from './abstract-component-with-init.js';
 
 const createEventOfferMarkup = (offer) => {
@@ -18,8 +18,8 @@ const showOffers =
   (offers) => offers.map(createEventOfferMarkup).join(`\n`);
 
 const createCardTemplate = (event) => {
-  const {type, basePrice, dateFrom, dateTo, offers, destination} = event;
-  const totalPrice = basePrice + offers.reduce((acc, {price}) => acc + price, 0);
+  const {type, dateFrom, dateTo, offers, destination} = event;
+  const totalPrice = getEventTotalPrice(event);
   const start = convertDateToDatetime(dateFrom);
   const end = convertDateToDatetime(dateTo);
   const duration = getDateDiff(dateFrom, dateTo);

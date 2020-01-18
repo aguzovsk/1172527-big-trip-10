@@ -1,4 +1,4 @@
-import {capitalize, getTypeText} from '../utils/common.js';
+import {capitalize, getTypeText, getEventTotalPrice} from '../utils/common.js';
 import {offerTypes, mockCities} from '../const.js';
 import AbstractComponentWithInit from './abstract-component-with-init.js';
 
@@ -39,9 +39,9 @@ const showOffer = (offer) => {
 };
 
 export const createNewEventTemplate = (event) => {
-  const {basePrice, dateFrom, dateTo, type, destination, offers} = event;
+  const {dateFrom, dateTo, type, destination, offers} = event;
   const {description, pictures} = destination;
-  const totalPrice = basePrice + offers.reduce((acc, {price}) => acc + price, 0);
+  const totalPrice = getEventTotalPrice(event);
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
       <header class="event__header">

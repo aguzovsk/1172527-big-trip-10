@@ -2,8 +2,9 @@ import NoCardsComponent from "../components/no-cards";
 import SortComponent, {SortTypes} from "../components/sort";
 import DaysContainer from "../components/days-container";
 import DayComponent from '../components/day.js';
-import {render, RenderPosition} from '../utils/render.js';
+import {render, RenderPosition, empty} from '../utils/render.js';
 import {isSameDay} from '../utils/date-utils.js';
+import {getEventTotalPrice} from '../utils/common.js';
 
 export default class TripController {
   constructor(container) {
@@ -35,10 +36,8 @@ export default class TripController {
           break;
         case SortTypes.BY_PRICE:
           events.sort((a, b) => {
-            const aPrice = a.offers.reduce((acc, {price}) => acc + price, 0) +
-              a.basePrice;
-            const bPrice = b.offers.reduce((acc, {price}) => acc + price, 0) +
-              b.basePrice;
+            const aPrice = getEventTotalPrice(a);
+            const bPrice = getEventTotalPrice(b);
             return bPrice - aPrice;
           });
           break;
@@ -51,7 +50,7 @@ export default class TripController {
           break;
       }
 
-      daysContainerElement.innerHTML = ``;
+      empty(daysContainerElement);
 
       const days = computeDays(events, sortType !== SortTypes.BY_EVENT);
       days.forEach((day) =>

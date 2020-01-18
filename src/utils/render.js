@@ -24,3 +24,9 @@ export const render = (container, element, place) => {
       break;
   }
 };
+
+export const empty = (containerNode) => {
+  while (containerNode.firstChild) {
+    containerNode.removeChild(containerNode.firstChild);
+  }
+};

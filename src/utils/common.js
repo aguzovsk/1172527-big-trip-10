@@ -27,3 +27,6 @@ export const capitalize =
   (str) => str.charAt(0).toUpperCase() + str.slice(1);
 
 export const formatDecimal = (dec) => dec < 10 ? `0${dec}` : `${dec}`;
+
+export const getEventTotalPrice = (event) =>
+  event.offers.reduce((acc, {price}) => acc + price, 0) + event.basePrice;
