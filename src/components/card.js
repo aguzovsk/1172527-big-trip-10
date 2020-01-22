@@ -1,7 +1,6 @@
 import {getHourMinute, convertDateToDatetime, getDateDiff} from '../utils/date-utils.js';
-import CardEditComponent from './new-event.js';
 import {getTypeText, getEventTotalPrice} from '../utils/common.js';
-import AbstractComponentWithInit from './abstract-component-with-init.js';
+import AbstractComponent from './abstract-component.js';
 
 const createEventOfferMarkup = (offer) => {
   const {description, price} = offer;
@@ -58,45 +57,19 @@ const createCardTemplate = (event) => {
   );
 };
 
-export default class CardComponent extends AbstractComponentWithInit {
-  constructor(event, parent) {
+export default class CardComponent extends AbstractComponent {
+  constructor(event) {
     super();
     this._event = event;
-    this._cardEdit = null;
-    this._parent = parent;
-    this._onEscKeyDownBinded = this.onEscKeyDown.bind(this);
   }
 
   getTemplate() {
     return createCardTemplate(this._event);
   }
 
-  unattachEscapeHandler() {
-    document.removeEventListener(`keydown`, this._onEscKeyDownBinded);
-  }
+  setEditButtonClickHandler(handler) {
+    const button = this.getElement().querySelector(`.event__rollup-btn`);
 
-  onEscKeyDown(evt) {
-    const isEscKey = evt.key === `Escape` || evt.key === `Esc`;
-
-    if (isEscKey) {
-      this._parent.replaceEditToCard(this._cardEdit, this);
-      this.unattachEscapeHandler();
-    }
-  }
-
-  setEditEventHandler() {
-    const button = this._element.querySelector(`.event__rollup-btn`);
-    const parent = this._parent;
-
-    button.addEventListener(`click`, () => {
-      parent.replaceCardToEdit(this, this._cardEdit);
-
-      document.addEventListener(`keydown`, this._onEscKeyDownBinded);
-    });
-  }
-
-  _init() {
-    this._cardEdit = new CardEditComponent(this._event, this, this._parent);
-    this.setEditEventHandler();
+    button.addEventListener(`click`, handler);
   }
 }

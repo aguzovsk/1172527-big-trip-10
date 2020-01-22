@@ -11,7 +11,9 @@ export const RenderPosition = {
   BEFOREEND: `beforeend`
 };
 
-export const render = (container, element, place) => {
+export const render = (containerComponent, element, place) => {
+  const container = containerComponent instanceof Element ?
+    containerComponent : containerComponent.getElement();
   switch (place) {
     case RenderPosition.AFTERBEGIN:
       container.prepend(element);
@@ -28,5 +30,21 @@ export const render = (container, element, place) => {
 export const empty = (containerNode) => {
   while (containerNode.firstChild) {
     containerNode.removeChild(containerNode.firstChild);
+  }
+};
+
+export const remove = (component) => {
+  component.getElement().remove();
+  component.removeElement();
+};
+
+export const replaceOldToNew = (oldComponent, newComponent) => {
+  const oldElement = oldComponent.getElement();
+  const newElement = newComponent.getElement();
+  const parentElement = oldElement.parentElement;
+
+  const isValid = Boolean(oldElement && newElement && parentElement);
+  if (isValid) {
+    parentElement.replaceChild(newElement, oldElement);
   }
 };

@@ -48,15 +48,8 @@ const generateDestination = (givenName) => {
   };
 };
 
-const generateDestinationList = (names) => {
-  let items;
-  if (names && names.length) {
-    items = names.map(generateDestination);
-  } else {
-    const size = getRandomIntInRange(5, 8);
-    items = new Array(size).fill(``).map(generateDestination);
-  }
-  return items;
+const generateDestinationList = () => {
+  return mockCities.map(generateDestination);
 };
 
 export {generateDestinationList, generateDestination};

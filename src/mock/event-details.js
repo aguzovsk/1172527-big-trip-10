@@ -49,6 +49,7 @@ const generateEventData = (destinationName) => {
     dateTo: second,
     type: generateType(),
     offers: generateOfferList(),
+    isFavorite: Math.random() > 0.6,
     destination: generateDestination(destinationName)
   };
 };

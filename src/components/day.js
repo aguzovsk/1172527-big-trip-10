@@ -1,14 +1,12 @@
 import {getMonthDay, convertDateToDatetime} from '../utils/date-utils.js';
-import CardListComponent from './card-container.js';
-import {render, RenderPosition} from '../utils/render.js';
-import AbstractComponentWithInit from './abstract-component-with-init.js';
+import AbstractComponent from './abstract-component.js';
 
-const createDayMarkup = (counter, date) => {
+const createDayMarkup = (index, date) => {
   return (
     `<li class="trip-days__item  day">
       <div class="day__info">
-      ${counter ?
-      `<span class="day__counter">${counter}</span>
+      ${index ?
+      `<span class="day__counter">${index}</span>
         <time class="day__date" datetime="${convertDateToDatetime(date)}">${getMonthDay(date)}</time>`
       : ``}
       </div>
@@ -16,19 +14,14 @@ const createDayMarkup = (counter, date) => {
   );
 };
 
-export default class DayComponent extends AbstractComponentWithInit {
-  constructor(events, counter) {
+export default class DayComponent extends AbstractComponent {
+  constructor(date, index) {
     super();
-    this._date = events[0].dateFrom;
-    this._counter = counter;
-    this._cardList = new CardListComponent(events);
+    this._date = date;
+    this._index = index;
   }
 
   getTemplate() {
-    return createDayMarkup(this._counter, this._date);
-  }
-
-  _init() {
-    render(this._element, this._cardList.getElement(), RenderPosition.BEFOREEND);
+    return createDayMarkup(this._index, this._date);
   }
 }
