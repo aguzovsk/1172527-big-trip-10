@@ -1,4 +1,13 @@
 import {formatDecimal} from './common.js';
+import moment from 'moment';
+
+export const formatDate = (date) => {
+  return moment(date).format(`DD MMMM`);
+};
+
+export const formatTime = (date) => {
+  return moment(date).format(`H`);
+};
 
 const MILLISECOND = 1;
 const SECOND = 1000 * MILLISECOND;

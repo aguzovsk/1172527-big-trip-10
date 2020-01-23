@@ -1,6 +1,9 @@
 import {capitalize, getTypeText} from '../utils/common.js';
 import {offerTypes} from '../const.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.min.css';
+import 'flatpickr/dist/themes/light.css';
 
 const createCitiesMarkup = (cities) => {
   return cities
@@ -24,11 +27,11 @@ const showGroupsOfEventTypes = (groups, selected) =>
   ))
     .join(`\n`);
 
-const showOffer = (offer) => {
+const showOffer = (offer, isChecked) => {
   const {name, description, price} = offer;
   return (
     `<div class="event__offer-selector">
-      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${name}-1" type="checkbox" name="event-offer-${name}" checked>
+      <input class="event__offer-checkbox  visually-hidden" id="event-offer-${name}-1" type="checkbox" name="event-offer-${name}" ${isChecked ? `checked` : ``}>
       <label class="event__offer-label" for="event-offer-${name}-1">
         <span class="event__offer-title">${description}</span>
         &plus;
@@ -38,11 +41,12 @@ const showOffer = (offer) => {
   );
 };
 
-export const createNewEventTemplate = (event, destinations, options = {}) => {
-  const {isEditMode, isFavorite, offers, destination, type} = options;
-  const {dateFrom, dateTo, basePrice} = event;
-  const {description, pictures} = destination;
+export const createNewEventTemplate = (destinations, options = {}) => {
+  const {isEditMode, isFavorite, offers, destination, type, dateFrom, dateTo, basePrice} = options;
+  const {isEnabledOffers} = options;
+  const {description, pictures} = destination || {name: null};
   const isValidDestination = !!destinations.get(destination.name);
+  const isEnabledSaveButton = isValidDestination && dateFrom <= dateTo;
   return (
     `<form class="trip-events__item  event  event--edit" action="#" method="post">
       <header class="event__header">
@@ -72,7 +76,7 @@ export const createNewEventTemplate = (event, destinations, options = {}) => {
           <label class="visually-hidden" for="event-start-time-1">
             From
           </label>
-          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom.toDateString()}">
+          <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom.toISOString()}">
           &mdash;
           <label class="visually-hidden" for="event-end-time-1">
             To
@@ -85,10 +89,10 @@ export const createNewEventTemplate = (event, destinations, options = {}) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+          <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${basePrice}">
         </div>
 
-        <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
+        <button class="event__save-btn  btn  btn--blue" type="submit" ${isEnabledSaveButton ? `` : `disabled`}>Save</button>
         <button class="event__reset-btn" type="reset">${isEditMode ? `Delete` : `Cancel`}</button>
         ${isEditMode ?
       `<input id="event-favorite-1" class="event__favorite-checkbox  visually-hidden" type="checkbox" name="event-favorite" ${isFavorite ? `checked` : ``}>
@@ -110,7 +114,7 @@ export const createNewEventTemplate = (event, destinations, options = {}) => {
       `<section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
-          ${offers.map(showOffer).join(`\n`)}
+          ${offers.map((offer, idx) => showOffer(offer, isEnabledOffers[idx])).join(`\n`)}
         </div>
       </section>` : ``}
       <section class="event__section  event__section--destination">
@@ -135,15 +139,23 @@ export default class CardEditComponent extends AbstractSmartComponent {
   constructor(event, destinations) {
     super();
     this._event = event;
+
     this._isEditMode = true;
     this._isFavorite = event.isFavorite;
     this._type = event.type;
     this._offers = event.offers;
     this._destination = event.destination;
+    this._dateFrom = event.dateFrom;
+    this._dateTo = event.dateTo;
+    this._basePrice = event.basePrice;
+    this._isEnabledOffers = new Array(event.offers.length).fill(true);
+
     this._destinations =
       destinations.reduce((hashmap, entry) =>
         hashmap.set(entry.name, entry), new Map()
       );
+    this._startFlatpickr = null;
+    this._endFlatpickr = null;
 
     this._submitHandler = null;
     this._deleteHandler = null;
@@ -151,6 +163,9 @@ export default class CardEditComponent extends AbstractSmartComponent {
     this._favoriteChangeHandler = null;
     this._eventTypeChangeHandler = null;
     this.setDestinationInputListener();
+    this._applyFlatpickr();
+    this.setPriceInputListener();
+    this.setOffersToggleListener();
   }
 
   recoveryListeners() {
@@ -160,15 +175,22 @@ export default class CardEditComponent extends AbstractSmartComponent {
     this.setRollupHandler(this._rollupHandler);
     this.setEventTypeChangeHandler(this._eventTypeChangeHandler);
     this.setDestinationInputListener();
+    this._applyFlatpickr();
+    this.setPriceInputListener();
+    this.setOffersToggleListener();
   }
 
   getTemplate() {
-    return createNewEventTemplate(this._event, this._destinations, {
+    return createNewEventTemplate(this._destinations, {
       isEditMode: this._isEditMode,
       isFavorite: this._isFavorite,
       destination: this._destination,
       offers: this._offers,
-      type: this._type
+      type: this._type,
+      dateFrom: this._dateFrom,
+      dateTo: this._dateTo,
+      basePrice: this._basePrice,
+      isEnabledOffers: this._isEnabledOffers
     });
   }
 
@@ -183,7 +205,10 @@ export default class CardEditComponent extends AbstractSmartComponent {
     const options = {
       destination: this._destination,
       offers: this._offers,
-      type: this._type
+      type: this._type,
+      dateFrom: this._dateFrom,
+      dateTo: this._dateTo,
+      basePrice: this._basePrice,
     };
 
     this._submitHandler = handler;
@@ -238,6 +263,77 @@ export default class CardEditComponent extends AbstractSmartComponent {
       this._destination = this._destinations.get(city) || {name: city};
 
       this.rerender();
+    });
+  }
+
+  setPriceInputListener() {
+    const element = this.getElement();
+    const basePriceInput = element.querySelector(`#event-price-1`);
+    basePriceInput.addEventListener(`input`, (evt) => {
+      this._basePrice = parseInt(evt.target.value, 10);
+    });
+  }
+
+  setOffersToggleListener() {
+    const element = this.getElement();
+    const toggles = element.querySelectorAll(`.event__offer-checkbox`);
+    toggles.forEach((toggle) => toggle.addEventListener(`change`, (evt) => {
+      const id = evt.target.id;
+      const regexp = /event-offer-([a-z]+)-1/;
+      const name = id.match(regexp)[1];
+      const index = this._offers.findIndex((offer) => offer.name === name);
+      this._isEnabledOffers[index] = !this._isEnabledOffers;
+    }));
+  }
+
+  _destroyFlatpickr() {
+    if (this._startFlatpickr) {
+      this._startFlatpickr.destroy();
+      this._startFlatpickr = null;
+    }
+
+    if (this._endFlatpickr) {
+      this._endFlatpickr.destroy();
+      this._endFlatpickr = null;
+    }
+  }
+
+  removeElement() {
+    super.removeElement();
+    this._destroyFlatpickr();
+  }
+
+  _applyFlatpickr() {
+    this._destroyFlatpickr();
+
+    const startDateElement = this.getElement().querySelector(`#event-start-time-1`);
+    const endDateElement = this.getElement().querySelector(`#event-end-time-1`);
+
+    this._startFlatpickr = flatpickr(startDateElement, {
+      // altInput: true,
+      allowInput: true,
+      enableTime: true,
+      dateFormat: `d/m/y H:i`,
+      defaultDate: this._event.dateFrom,
+      minuteIncrement: 1,
+      onChange: (selectedDates) => {
+        const dateFrom = new Date(selectedDates);
+        this._endFlatpickr.config.minDate = dateFrom;
+        this._dateFrom = dateFrom;
+      }
+    });
+
+    this._endFlatpickr = flatpickr(endDateElement, {
+      // altInput: true,
+      allowInput: true,
+      enableTime: true,
+      dateFormat: `d/m/y H:i`,
+      minuteIncrement: 1,
+      minDate: this._event.dateFrom,
+      defaultDate: this._event.dateTo,
+      onChange: (selectedDates) => {
+        this._dateTo = new Date(selectedDates);
+      }
     });
   }
 

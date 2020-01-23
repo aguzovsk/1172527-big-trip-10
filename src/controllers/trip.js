@@ -48,7 +48,7 @@ const splitSortedEventsByDate = (events) => {
 const renderDays = (containerComponent, events, noDays, onDataChange, onViewChange) => {
   let pointControllers = [];
   if (noDays) {
-    pointControllers = renderDay(containerComponent, events, 0, onDataChange);
+    pointControllers = renderDay(containerComponent, events, 0, onDataChange, onViewChange);
   } else {
     const eventsByDay = splitSortedEventsByDate(events);
 
@@ -72,6 +72,7 @@ export default class TripController {
     this._events = [];
     this._onDataChange = this._onDataChange.bind(this);
     this._onViewChange = this._onViewChange.bind(this);
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._sortType = SortTypes.BY_EVENT;
   }
 
@@ -161,7 +162,8 @@ export default class TripController {
     this._sortType = sortType;
     const sortedEvents = this._sortEvents(sortType);
     empty(this._daysContainerComponent.getElement());
-    // this._pointControllers =
-    renderDays(this._daysContainerComponent, sortedEvents, this.sortType !== SortTypes.BY_EVENT, this._onDataChange, this._onViewChange);
+    this._pointControllers.forEach((ctrl) => ctrl.empty());
+    this._pointControllers =
+      renderDays(this._daysContainerComponent, sortedEvents, this._sortType !== SortTypes.BY_EVENT, this._onDataChange, this._onViewChange);
   }
 }

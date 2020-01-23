@@ -39,18 +39,20 @@ export default class PointController {
       }));
     });
 
-    this._pointEditComponent.setSubmitHandler((evt, oldEvent, options) => {
+    this._pointEditComponent.setSubmitHandler((evt/* , oldEvent, options */) => {
+      // alert("Update is not implemented yet.");
       evt.preventDefault();
-      this._onDataChange(this, oldEvent, Object.assign({}, oldEvent, options));
-      this._replaceEditToPoint();
+      // this._onDataChange(this, oldEvent, Object.assign({}, oldEvent, options));
+      // this._replaceEditToPoint();
     });
 
     this._pointEditComponent.setRollupHandler(() => {
       this._replaceEditToPoint();
     });
 
-    this._pointEditComponent.setDeleteHandler((oldEvent) => {
-      this._onDataChange(this, oldEvent, null);
+    this._pointEditComponent.setDeleteHandler((/* oldEvent */) => {
+      // alert("Deletion is not implement yet");
+      // this._onDataChange(this, oldEvent, null);
     });
 
     this._pointEditComponent.setEventTypeChangeHandler(() => {

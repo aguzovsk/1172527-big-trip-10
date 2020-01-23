@@ -30,3 +30,15 @@ export const formatDecimal = (dec) => dec < 10 ? `0${dec}` : `${dec}`;
 
 export const getEventTotalPrice = (event) =>
   event.offers.reduce((acc, {price}) => acc + price, 0) + event.basePrice;
+
+export const addToArrayAtIndex = (array, index, item) => {
+  const first = array.slice(0, index);
+  const second = array.slice(index + 1);
+  return [].concat(first, item, second);
+};
+
+export const removeFromArrayAtIndex = (array, index) => {
+  const first = array.slice(0, index);
+  const second = array.slice(index + 1);
+  return [].concat(first, second);
+};
