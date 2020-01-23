@@ -1,36 +1,34 @@
+import moment from 'moment';
 import {getRandomIntInRange} from '../utils/common.js';
-import {MINUTE, HOUR, DAY} from '../utils/date-utils.js';
 import {offerTypes} from '../const.js';
 import {generateDestination} from './destination.js';
 import {generateOfferList} from './offer.js';
 
 const LENGTH = 10;
 let seq = 0;
-const dateStartOffset = -5;
+const dateStartOffset = -6;
 const dateEndOffset = 6;
-const endDateMaximumDayOffset = 3;
 
-const getRandomDate = () => {
-  const targetDate = new Date();
-  const days = getRandomIntInRange(dateStartOffset, dateEndOffset);
-  const hours = getRandomIntInRange(-12, 12);
-  const minutes = getRandomIntInRange(-30, 30);
+const getRandomMoment = (firstMoment) => {
+  const isSecond = !!firstMoment;
+  const targetMoment = isSecond ? firstMoment.clone() : moment().startOf(`month`);
+  const randomDayStartOffset = isSecond ? 0 : dateStartOffset;
+  const randomHourStartOffset = isSecond ? 0 : -24;
+  const randomMinuteStartOffset = isSecond ? 0 : -60;
+  const days = getRandomIntInRange(randomDayStartOffset, dateEndOffset);
+  const hours = getRandomIntInRange(randomHourStartOffset, 24);
+  const minutes = getRandomIntInRange(randomMinuteStartOffset, 60);
 
-  targetDate.setTime(targetDate.getTime() + days * DAY + hours * HOUR + minutes * MINUTE);
+  targetMoment.add({days, hours, minutes});
 
-  return targetDate;
+  return targetMoment;
 };
 
 const generatePairDates = () => {
-  const first = getRandomDate();
+  const first = getRandomMoment();
+  const second = getRandomMoment(first);
 
-  const minutes = getRandomIntInRange(0, 60) * MINUTE;
-  const hours = getRandomIntInRange(0, 24) * HOUR;
-  const days = getRandomIntInRange(0, endDateMaximumDayOffset) * DAY;
-
-  const second = new Date(first.getTime() + minutes + hours + days);
-
-  return {first, second};
+  return {first: first.toDate(), second: second.toDate()};
 };
 
 const generateType = () => {

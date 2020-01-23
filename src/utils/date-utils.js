@@ -1,55 +1,26 @@
 import {formatDecimal} from './common.js';
 import moment from 'moment';
 
-export const formatDate = (date) => {
-  return moment(date).format(`DD MMMM`);
-};
+export const getMonthDay = (date) => moment(date).format(`MMM DD`);
 
-export const formatTime = (date) => {
-  return moment(date).format(`H`);
-};
+export const getHourMinute = (date) => moment(date).format(`HH:mm`);
 
-const MILLISECOND = 1;
-const SECOND = 1000 * MILLISECOND;
-export const MINUTE = 60 * SECOND;
-export const HOUR = 60 * MINUTE;
-export const DAY = 24 * HOUR;
+export const isSameMonth = (date1, date2) => moment(date1).isSame(date2, `month`);
+export const isSameDay = (date1, date2) => moment(date1).isSame(date2, `day`);
 
-const getYearMonthDay = (date) => date
-  .toISOString().split(`T`)[0];
-export const getMonthDay = (date) => date
-  .toDateString().split(` `)
-  .slice(1, 3).join(` `);
-export const getHourMinute = (date) => {
-  const hours = formatDecimal(date.getHours());
-  const minutes = formatDecimal(date.getMinutes());
-  return `${hours}:${minutes}`;
-};
-
-export const isSameMonth = (date1, date2) =>
-  date1.getMonth() === date2.getMonth() &&
-  date1.getFullYear() === date2.getFullYear();
-export const isSameDay = (date1, date2) =>
-  date1.getDate() === date2.getDate() &&
-  isSameMonth(date1, date2);
-
-export const convertDateToDatetime = (date) => {
-  const day = getYearMonthDay(date);
-  const time = getHourMinute(date);
-  return `${day}T${time}`;
-};
+export const convertDateToDatetime = (date) => moment(date).format(`YYYY-MM-DDTHH:mm`);
 
 export const getDateDiff = (startDate, endDate) => {
-  let min = Math.min(startDate, endDate);
-  let max = Math.max(startDate, endDate);
-  min = min - (min % MINUTE);
-  max = max - (max % MINUTE);
+  const start = moment(startDate);
+  const end = moment(endDate);
+  const min = moment.min(start, end);
+  const max = moment.max(start, end);
 
-  const diff = max - min;
+  const duration = moment.duration(max.diff(min));
 
-  const diffDays = Math.floor(diff / DAY);
-  const diffHours = Math.floor((diff % DAY) / HOUR);
-  const diffMinutes = Math.floor((diff % HOUR) / MINUTE);
+  const diffDays = duration.days();
+  const diffHours = duration.hours();
+  const diffMinutes = duration.minutes();
 
   const items = [];
   if (diffDays > 0) {
