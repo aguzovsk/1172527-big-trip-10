@@ -42,3 +42,42 @@ export const removeFromArrayAtIndex = (array, index) => {
   const second = array.slice(index + 1);
   return [].concat(first, second);
 };
+
+export const removeFromArray = (array, element) => {
+  const index = array.findIndex((elem) => elem === element);
+
+  if (index === -1) {
+    throw new Error(`Can't find element in array`);
+  }
+
+  return removeFromArrayAtIndex(array, index);
+};
+
+export const unshiftArray = (array, element) => {
+  return [].concat(element, array);
+};
+
+export const replaceElementInArray = (array, oldElement, newElement) => {
+  if (typeof oldElement.id !== typeof newElement.id) {
+    throw new Error(`Either old element or new element has undefined id field, while other has defined`);
+  }
+
+  let index = -1;
+
+  if (typeof oldElement === `undefined`) {
+    index = array.findIndex((elem) => elem === oldElement);
+    if (index === -1) {
+      throw new Error(`Can't find element in array`);
+    }
+  } else {
+    index = array.findIndex((elem) => elem.id === oldElement.id);
+    if (index === -1) {
+      throw new Error(`Can't find element in array with such id ${oldElement.id}`);
+    }
+  }
+
+  const first = array.slice(0, index);
+  const second = array.slice(index + 1);
+
+  return [].concat(first, newElement, second);
+};

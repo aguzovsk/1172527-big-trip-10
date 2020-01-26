@@ -1,6 +1,7 @@
 import {getHourMinute, convertDateToDatetime, getDateDiff} from '../utils/date-utils.js';
 import {getTypeText, getEventTotalPrice} from '../utils/common.js';
 import AbstractComponent from './abstract-component.js';
+import {dummyPoint} from '../const.js';
 
 const createEventOfferMarkup = (offer) => {
   const {description, price} = offer;
@@ -60,7 +61,7 @@ const createCardTemplate = (event) => {
 export default class CardComponent extends AbstractComponent {
   constructor(event) {
     super();
-    this._event = event;
+    this._event = event || dummyPoint;
   }
 
   getTemplate() {

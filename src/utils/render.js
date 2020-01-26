@@ -24,6 +24,8 @@ export const render = (containerComponent, element, place) => {
     case RenderPosition.AFTEREND:
       container.insertAdjacentElement(RenderPosition.AFTEREND, element);
       break;
+    default:
+      throw new Error(`Undefined render position ${place}`);
   }
 };
 

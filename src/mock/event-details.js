@@ -11,7 +11,7 @@ const dateEndOffset = 6;
 
 const getRandomMoment = (firstMoment) => {
   const isSecond = !!firstMoment;
-  const targetMoment = isSecond ? firstMoment.clone() : moment().startOf(`month`);
+  const targetMoment = isSecond ? firstMoment.clone() : moment();
   const randomDayStartOffset = isSecond ? 0 : dateStartOffset;
   const randomHourStartOffset = isSecond ? 0 : -24;
   const randomMinuteStartOffset = isSecond ? 0 : -60;

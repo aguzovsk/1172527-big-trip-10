@@ -1,5 +1,5 @@
 import {capitalize, getTypeText} from '../utils/common.js';
-import {offerTypes} from '../const.js';
+import {offerTypes, dummyPoint} from '../const.js';
 import AbstractSmartComponent from './abstract-smart-component.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -42,9 +42,10 @@ const showOffer = (offer, isChecked) => {
 };
 
 export const createNewEventTemplate = (destinations, options = {}) => {
-  const {isEditMode, isFavorite, offers, destination, type, dateFrom, dateTo, basePrice} = options;
+  const {isEditMode, isFavorite, offers, type, dateFrom, dateTo, basePrice} = options;
+  const {destination = {name: ``}} = options;
   const {isEnabledOffers} = options;
-  const {description, pictures} = destination || {name: null};
+  const {description, pictures} = destination;
   const isValidDestination = !!destinations.get(destination.name);
   const isEnabledSaveButton = isValidDestination && dateFrom <= dateTo;
   return (
@@ -140,15 +141,17 @@ export default class CardEditComponent extends AbstractSmartComponent {
     super();
     this._event = event;
 
-    this._isEditMode = true;
-    this._isFavorite = event.isFavorite;
-    this._type = event.type;
-    this._offers = event.offers;
-    this._destination = event.destination;
-    this._dateFrom = event.dateFrom;
-    this._dateTo = event.dateTo;
-    this._basePrice = event.basePrice;
-    this._isEnabledOffers = new Array(event.offers.length).fill(true);
+    const safeEvent = event || dummyPoint;
+
+    this._isEditMode = !!event;
+    this._isFavorite = safeEvent.isFavorite;
+    this._type = safeEvent.type;
+    this._offers = safeEvent.offers;
+    this._destination = safeEvent.destination;
+    this._dateFrom = safeEvent.dateFrom;
+    this._dateTo = safeEvent.dateTo;
+    this._basePrice = safeEvent.basePrice;
+    this._isEnabledOffers = new Array(safeEvent.offers.length).fill(true);
 
     this._destinations =
       destinations.reduce((hashmap, entry) =>
@@ -202,18 +205,20 @@ export default class CardEditComponent extends AbstractSmartComponent {
 
   setSubmitHandler(handler) {
     const form = this.getElement();
-    const options = {
-      destination: this._destination,
-      offers: this._offers,
-      type: this._type,
-      dateFrom: this._dateFrom,
-      dateTo: this._dateTo,
-      basePrice: this._basePrice,
-    };
-
     this._submitHandler = handler;
 
-    form.addEventListener(`submit`, (evt) => handler(evt, this._event, options));
+    form.addEventListener(`submit`, (evt) => {
+      evt.preventDefault();
+      const options = {
+        destination: this._destination,
+        offers: this._offers,
+        type: this._type,
+        dateFrom: this._dateFrom,
+        dateTo: this._dateTo,
+        basePrice: this._basePrice,
+      };
+      handler(this._event, options);
+    });
   }
 
   setDeleteHandler(handler) {
@@ -221,10 +226,17 @@ export default class CardEditComponent extends AbstractSmartComponent {
 
     this._deleteHandler = handler;
 
-    form.addEventListener(`reset`, () => handler(this._event));
+    form.addEventListener(`reset`, (evt) => {
+      evt.preventDefault();
+      handler(this._event);
+    });
   }
 
   setRollupHandler(handler) {
+    if (!this._isEditMode) {
+      return;
+    }
+
     const button = this.getElement().querySelector(`.event__rollup-btn`);
 
     this._rollupHandler = handler;
@@ -233,11 +245,13 @@ export default class CardEditComponent extends AbstractSmartComponent {
   }
 
   setFavoriteChangeHandler(handler) {
+    if (!this._isEditMode) {
+      return;
+    }
+
     const button = this.getElement()
       .querySelector(`#event-favorite-1`);
-
     this._favoriteChangeHandler = handler;
-
     button.addEventListener(`change`, () => handler(this._event));
   }
 
@@ -314,12 +328,13 @@ export default class CardEditComponent extends AbstractSmartComponent {
       allowInput: true,
       enableTime: true,
       dateFormat: `d/m/y H:i`,
-      defaultDate: this._event.dateFrom,
+      defaultDate: this._dateFrom,
       minuteIncrement: 1,
       onChange: (selectedDates) => {
         const dateFrom = new Date(selectedDates);
-        this._endFlatpickr.config.minDate = dateFrom;
         this._dateFrom = dateFrom;
+        // this._endFlatpickr.config.minDate = dateFrom;
+        this.rerender();
       }
     });
 
@@ -329,10 +344,11 @@ export default class CardEditComponent extends AbstractSmartComponent {
       enableTime: true,
       dateFormat: `d/m/y H:i`,
       minuteIncrement: 1,
-      minDate: this._event.dateFrom,
-      defaultDate: this._event.dateTo,
+      minDate: this._dateFrom,
+      defaultDate: this._dateTo,
       onChange: (selectedDates) => {
         this._dateTo = new Date(selectedDates);
+        this.rerender();
       }
     });
   }

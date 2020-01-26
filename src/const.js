@@ -23,3 +23,14 @@ export const offerTypes = [
     ]
   }
 ];
+
+export const dummyPoint = {
+  id: Number.NaN,
+  destination: {name: ``},
+  offers: [],
+  basePrice: 0,
+  isFavorite: false,
+  dateFrom: new Date(),
+  dateTo: new Date(+(new Date()) + 600000),
+  type: offerTypes[0][`types`][0]
+};

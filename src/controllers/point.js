@@ -5,7 +5,8 @@ import {generateOfferList} from "../mock/offer";
 
 const Mode = {
   DEFAULT: `default`,
-  EDIT: `edit`
+  EDIT: `edit`,
+  CREATE: `create`
 };
 
 export default class PointController {
@@ -22,7 +23,11 @@ export default class PointController {
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
-  render(event) {
+  render(event/* , mode */) {
+    // if (mode) {
+    //   this._mode = Mode.CREATION;
+    // }
+
     const oldPointComponent = this._pointComponent;
     const oldPointEditComponent = this._pointEditComponent;
 
@@ -33,37 +38,40 @@ export default class PointController {
       this._replacePointToEdit();
     });
 
-    this._pointEditComponent.setFavoriteChangeHandler(() => {
-      this._onDataChange(this, event, Object.assign({}, event, {
-        isFavorite: !event.isFavorite
+    this._pointEditComponent.setFavoriteChangeHandler((oldEvent) => {
+      this._onDataChange(this, oldEvent, Object.assign({}, oldEvent, {
+        isFavorite: !oldEvent.isFavorite
       }));
     });
 
-    this._pointEditComponent.setSubmitHandler((evt/* , oldEvent, options */) => {
-      // alert("Update is not implemented yet.");
-      evt.preventDefault();
-      // this._onDataChange(this, oldEvent, Object.assign({}, oldEvent, options));
-      // this._replaceEditToPoint();
+    this._pointEditComponent.setSubmitHandler((oldEvent, options) => {
+      this._onDataChange(this, oldEvent, Object.assign({}, oldEvent, options));
+      this._replaceEditToPoint();
     });
 
     this._pointEditComponent.setRollupHandler(() => {
       this._replaceEditToPoint();
     });
 
-    this._pointEditComponent.setDeleteHandler((/* oldEvent */) => {
-      // alert("Deletion is not implement yet");
-      // this._onDataChange(this, oldEvent, null);
+    this._pointEditComponent.setDeleteHandler((oldEvent) => {
+      this._onDataChange(this, oldEvent, null);
     });
 
     this._pointEditComponent.setEventTypeChangeHandler(() => {
       return generateOfferList();
     });
 
-    if (oldPointEditComponent && oldPointComponent) {
-      replaceOldToNew(oldPointComponent, this._pointComponent);
-      replaceOldToNew(oldPointEditComponent, this._pointEditComponent);
+    if (event) {
+      if (oldPointEditComponent && oldPointComponent) {
+        replaceOldToNew(oldPointComponent, this._pointComponent);
+        replaceOldToNew(oldPointEditComponent, this._pointEditComponent);
+      } else {
+        render(this._container, this._pointComponent.getElement(), RenderPosition.BEFOREEND);
+      }
     } else {
-      render(this._container, this._pointComponent.getElement(), RenderPosition.BEFOREEND);
+      this._onViewChange();
+      this._mode = Mode.CREATE;
+      render(this._container, this._pointEditComponent.getElement(), RenderPosition.AFTEREND);
     }
   }
 
@@ -93,7 +101,11 @@ export default class PointController {
 
   setDefaultView() {
     if (this._mode !== Mode.DEFAULT) {
-      this._replaceEditToPoint();
+      if (this._mode === Mode.CREATE) {
+        this.empty();
+      } else {
+        this._replaceEditToPoint();
+      }
     }
   }
 

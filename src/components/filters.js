@@ -1,6 +1,12 @@
 import {capitalize} from '../utils/common.js';
 import AbstractComponent from './abstract-component.js';
 
+export const FilterTypes = {
+  EVERYTHING: `everything`,
+  PAST: `past`,
+  FUTURE: `future`
+};
+
 const createFilterMarkup = (type, isActive) => {
   const checked = isActive ? ` checked` : ``;
   return (
@@ -33,5 +39,13 @@ export default class FiltersComponent extends AbstractComponent {
 
   getTemplate() {
     return createFiltersTemplate(this._filterNames);
+  }
+
+  setEventHandler(handler) {
+    const form = this.getElement();
+    form.addEventListener(`change`, (evt) => {
+      const value = evt.target.value;
+      handler(value);
+    });
   }
 }
