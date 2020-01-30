@@ -10,13 +10,19 @@ export const isSameDay = (date1, date2) => moment(date1).isSame(date2, `day`);
 
 export const convertDateToDatetime = (date) => moment(date).format(`YYYY-MM-DDTHH:mm`);
 
-export const getDateDiff = (startDate, endDate) => {
+export const computeDuration = (startDate, endDate) => {
   const start = moment(startDate);
   const end = moment(endDate);
   const min = moment.min(start, end);
   const max = moment.max(start, end);
 
   const duration = moment.duration(max.diff(min));
+
+  return duration;
+};
+
+export const getDateDiff = (startDate, endDate) => {
+  const duration = computeDuration(startDate, endDate);
 
   const diffDays = duration.days();
   const diffHours = duration.hours();

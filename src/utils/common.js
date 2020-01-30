@@ -10,7 +10,7 @@ export const getShuffled = (input) => {
 };
 
 export const getTypeText = (type) => {
-  const activityTypes = offerTypes.find((obj) => obj.name === `Activity`).types;
+  const activityTypes = offerTypes.get(`Activity`);
   const isActivity = activityTypes.indexOf(type) !== -1;
   const capitalized = capitalize(type);
   if (!isActivity) {

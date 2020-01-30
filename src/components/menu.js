@@ -7,15 +7,15 @@ const createMenuButtonMarkup = (name, isActive, reference = `#`) => {
   );
 };
 
-const showTabs = (names) =>
+const showTabs = (names, currentState) =>
   names.map(
-    (name, idx) => createMenuButtonMarkup(name, idx === 0)
+    (name) => createMenuButtonMarkup(name, name === currentState)
   ).join(`\n`);
 
-const createMenuTemplate = (names) => {
+const createMenuTemplate = (names, currentState) => {
   return (
     `<nav class="trip-controls__trip-tabs  trip-tabs">
-      ${showTabs(names)}
+      ${showTabs(names, currentState)}
     </nav>`
   );
 };
@@ -24,9 +24,27 @@ export default class MenuComponent extends AbstractComponent {
   constructor(names) {
     super();
     this._names = names;
+    this._state = names[0];
   }
 
   getTemplate() {
-    return createMenuTemplate(this._names);
+    return createMenuTemplate(this._names, this._state);
+  }
+
+  setOnChange(handler) {
+    const links = this.getElement().querySelectorAll(`a`);
+    links.forEach((link) => link.addEventListener(`click`, (evt) => {
+      const target = evt.target;
+      const name = target.innerText;
+
+      if (this._state === name) {
+        return;
+      }
+
+      links.forEach((l) => l.classList.remove(`trip-tabs__btn--active`));
+      target.classList.add(`trip-tabs__btn--active`);
+      this._state = name;
+      handler(name);
+    }));
   }
 }

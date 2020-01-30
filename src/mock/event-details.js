@@ -32,7 +32,10 @@ const generatePairDates = () => {
 };
 
 const generateType = () => {
-  const allTypes = offerTypes.reduce((acc, {types}) => acc.concat(types), []);
+  let allTypes = [];
+  for (const value of offerTypes.values()) {
+    allTypes = allTypes.concat(value);
+  }
   const idx = getRandomIntInRange(0, allTypes.length);
   return allTypes[idx];
 };

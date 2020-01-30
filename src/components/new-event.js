@@ -17,15 +17,18 @@ const showEventType = (type, isSelected) =>
     <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${capitalize(type)}</label>
   </div>`;
 
-const showGroupsOfEventTypes = (groups, selected) =>
-  groups.map((group) => (
-    `<fieldset class="event__type-group">
-      <legend class="visually-hidden">${group.name}</legend>
+const showGroupsOfEventTypes = (selected) => {
+  const groups = Array.from(offerTypes.keys());
 
-      ${group.types.map((type) => showEventType(type, type === selected)).join(`\n`)}
+  return groups.map((group) => (
+    `<fieldset class="event__type-group">
+      <legend class="visually-hidden">${group}</legend>
+
+      ${offerTypes.get(group).map((type) => showEventType(type, type === selected)).join(`\n`)}
     </fieldset>`
   ))
     .join(`\n`);
+};
 
 const showOffer = (offer, isChecked) => {
   const {name, description, price} = offer;
@@ -59,7 +62,7 @@ export const createNewEventTemplate = (destinations, options = {}) => {
           <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
           <div class="event__type-list">
-            ${showGroupsOfEventTypes(offerTypes, type)}
+            ${showGroupsOfEventTypes(type)}
           </div>
         </div>
 

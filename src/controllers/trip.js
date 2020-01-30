@@ -102,6 +102,24 @@ export default class TripController {
     this._sortComponent.setEventHandlers(this._onSortTypeChange);
   }
 
+  show() {
+    const somePoints = this._pointsModel.isEmpty();
+    if (somePoints) {
+      this._daysContainerComponent.show();
+    } else {
+      this._noCardsComponent.show();
+    }
+  }
+
+  hide() {
+    const somePoints = this._pointsModel.isEmpty();
+    if (somePoints) {
+      this._daysContainerComponent.hide();
+    } else {
+      this._noCardsComponent.hide();
+    }
+  }
+
   _onDataChange(controller, oldPoint, newPoint) {
     if (!oldPoint) {
       this._clearNewEventController();

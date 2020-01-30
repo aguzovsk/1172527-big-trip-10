@@ -10,6 +10,10 @@ export default class PointsModel {
     this.onFilterTypeChange = this.onFilterTypeChange.bind(this);
   }
 
+  getAllPoints() {
+    return this._points;
+  }
+
   getPoints() {
     const now = new Date();
     switch (this._filterType) {
@@ -59,5 +63,9 @@ export default class PointsModel {
 
   setFilterChangeHandler(handler) {
     this._filterChangeHandler = handler;
+  }
+
+  isEmpty() {
+    return !this._points.length;
   }
 }
