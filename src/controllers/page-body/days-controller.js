@@ -1,7 +1,7 @@
-import DefaultContainer from "../components/default-container-component";
-import {isSameDay} from '../utils/date-utils';
+import DefaultContainer from "../../components/default-container-component";
+import {isSameDay} from '../../utils/date-utils';
 import DayController from "./day-controller";
-import {empty, render, RenderPosition} from "../utils/render";
+import {empty, render, RenderPosition} from "../../utils/render";
 
 const splitSortedEventsByDate = (events) => {
   const days = [[events[0]]];

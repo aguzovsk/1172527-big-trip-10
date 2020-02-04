@@ -1,5 +1,5 @@
-import RouteComponent from '../components/route-component';
-import {render, RenderPosition} from "../utils/render";
+import RouteComponent from '../../components/page-header/route-component';
+import {render, RenderPosition} from "../../utils/render";
 
 export default class RouteController {
   constructor(container, pointsModel) {

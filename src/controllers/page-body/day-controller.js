@@ -1,6 +1,6 @@
-import DayComponent from '../components/day-component';
-import {render, RenderPosition} from '../utils/render';
-import DefaultContainer from '../components/default-container-component';
+import DayComponent from '../../components/page-body/day-component';
+import {render, RenderPosition} from '../../utils/render';
+import DefaultContainer from '../../components/default-container-component';
 import PointController from "./point-controller";
 
 export default class DayController {

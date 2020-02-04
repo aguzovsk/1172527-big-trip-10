@@ -1,7 +1,7 @@
-import DefaultContainer from "../components/default-container-component";
+import DefaultContainer from "../../components/default-container-component";
 import MenuController from "./menu-controller";
 import FiltersController from "./filters-controller";
-import {render, RenderPosition} from "../utils/render";
+import {render, RenderPosition} from "../../utils/render";
 
 export default class TripControlsController {
   constructor(container, dependencies) {

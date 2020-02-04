@@ -1,8 +1,8 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import AbstractSmartComponent from './abstract-smart-component';
-import {offerTypesEmoji, offerTypes} from '../const';
-import {computeDuration} from '../utils/date-utils';
+import AbstractSmartComponent from '../abstract-smart-component';
+import {offerTypesEmoji, offerTypes} from '../../const';
+import {computeDuration} from '../../utils/date-utils';
 
 const getRandomColor = () => {
   const value = Math.floor(Math.random() * 0xffffff);

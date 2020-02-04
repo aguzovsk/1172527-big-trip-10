@@ -1,7 +1,7 @@
 import RouteController from "./route-controller";
-import TripInfoComponent from "../components/trip-info-component";
-import {render, RenderPosition} from "../utils/render";
-import {getEventTotalPrice} from '../utils/common';
+import TripInfoComponent from "../../components/page-header/trip-info-component";
+import {render, RenderPosition} from "../../utils/render";
+import {getEventTotalPrice} from '../../utils/common';
 
 export default class TripInfoController {
   constructor(container, pointsModel) {

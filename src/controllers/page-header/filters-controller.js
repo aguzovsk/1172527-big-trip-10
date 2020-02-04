@@ -1,6 +1,6 @@
-import FiltersComponent from "../components/filters-component";
-import {filterNames} from "../const";
-import {render, RenderPosition} from "../utils/render";
+import FiltersComponent from "../../components/page-header/filters-component";
+import {filterNames} from "../../const";
+import {render, RenderPosition} from "../../utils/render";
 
 export default class FiltersController {
   constructor(container, {pointsModel}) {

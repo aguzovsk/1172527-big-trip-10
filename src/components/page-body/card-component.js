@@ -1,6 +1,6 @@
-import {getHourMinute, convertDateToDatetime, getDateDiff} from '../utils/date-utils';
-import {getTypeText, getEventTotalPrice, getFirstThree} from '../utils/common';
-import AbstractComponent from './abstract-component';
+import {getHourMinute, convertDateToDatetime, getDateDiff} from '../../utils/date-utils';
+import {getTypeText, getEventTotalPrice, getFirstThree} from '../../utils/common';
+import AbstractComponent from '../abstract-component';
 
 const createEventOfferMarkup = (offer) => {
   const {description, price} = offer;

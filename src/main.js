@@ -1,7 +1,7 @@
-import TripEventsController from './controllers/trip-events-controller';
-import StatisticsComponent from './components/statistics-component';
+import TripEventsController from './controllers/page-body/trip-events-controller';
+import StatisticsComponent from './components/page-body/statistics-component';
 import DefaultContainer from './components/default-container-component';
-import TripMainController from './controllers/trip-main-controller';
+import TripMainController from './controllers/page-header/trip-main-controller';
 import PointsModel from './models/points-model';
 import API from './api';
 import {URL, AUTHORIZATION} from './const';

@@ -1,5 +1,5 @@
-import {getMonthDay, convertDateToDatetime} from '../utils/date-utils';
-import AbstractComponent from './abstract-component';
+import {getMonthDay, convertDateToDatetime} from '../../utils/date-utils';
+import AbstractComponent from '../abstract-component';
 
 const createDayMarkup = (index, date) => {
   return (

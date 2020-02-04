@@ -1,4 +1,4 @@
-import AbstractComponent from './abstract-component';
+import AbstractComponent from '../abstract-component';
 
 const createMenuButtonMarkup = (name, isActive, reference = `#`) => {
   const activeClass = isActive ? ` trip-tabs__btn--active` : ``;

@@ -1,5 +1,5 @@
-import {capitalize} from '../utils/common';
-import AbstractComponent from './abstract-component';
+import {capitalize} from '../../utils/common';
+import AbstractComponent from '../abstract-component';
 
 export const FilterTypes = {
   EVERYTHING: `everything`,

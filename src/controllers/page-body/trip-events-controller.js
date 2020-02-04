@@ -1,12 +1,12 @@
-import NoCardsComponent from "../components/no-cards-component";
-import SortComponent, {SortTypes} from "../components/sort-component";
-import {render, RenderPosition} from '../utils/render';
-import {getEventTotalPrice} from '../utils/common';
+import NoCardsComponent from "../../components/page-body/no-cards-component";
+import SortComponent, {SortTypes} from "../../components/page-body/sort-component";
+import {render, RenderPosition} from '../../utils/render';
+import {getEventTotalPrice} from '../../utils/common';
 import DaysController from "./days-controller";
-import TripEventsComponent from '../components/trip-events-component';
-import LoadingComponent from "../components/loading-component";
+import TripEventsComponent from '../../components/page-body/trip-events-component';
+import LoadingComponent from "../../components/page-body/loading-component";
 import PointController, {PointControllerMode} from "./point-controller";
-import Point from "../models/point-model";
+import Point from "../../models/point-model";
 
 export default class TripEventsController {
   constructor(container, dependencies) {

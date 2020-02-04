@@ -1,6 +1,6 @@
-import {getMonthDay, isSameMonth} from "../utils/date-utils";
-import {formatDecimal} from "../utils/common";
-import AbstractSmartComponent from "./abstract-smart-component";
+import {getMonthDay, isSameMonth} from "../../utils/date-utils";
+import {formatDecimal} from "../../utils/common";
+import AbstractSmartComponent from "../abstract-smart-component";
 
 export const createRouteTemplate = (title, startDate, finnishDate) => {
   const start = getMonthDay(startDate);

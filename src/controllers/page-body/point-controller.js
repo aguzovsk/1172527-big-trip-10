@@ -1,8 +1,8 @@
-import CardComponent from "../components/card-component";
-import CardEditComponent from "../components/new-event-component";
-import {render, RenderPosition, replaceOldToNew, remove} from '../utils/render';
-import {generateOfferList} from "../mock/offer";
-import {isValidPoint} from '../utils/common';
+import CardComponent from "../../components/page-body/card-component";
+import CardEditComponent from "../../components/page-body/new-event-component";
+import {render, RenderPosition, replaceOldToNew, remove} from '../../utils/render';
+import {generateOfferList} from "../../mock/offer";
+import {isValidPoint} from '../../utils/common';
 
 export const PointControllerMode = {
   DEFAULT: `default`,

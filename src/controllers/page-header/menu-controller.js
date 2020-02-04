@@ -1,6 +1,6 @@
-import MenuComponent from '../components/menu-component';
-import {menuNames, MenuItem} from "../const";
-import {render, RenderPosition} from "../utils/render";
+import MenuComponent from '../../components/page-header/menu-component';
+import {menuNames, MenuItem} from "../../const";
+import {render, RenderPosition} from "../../utils/render";
 
 export default class MenuController {
   constructor(container, dependencies) {

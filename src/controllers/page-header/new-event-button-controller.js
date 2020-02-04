@@ -1,5 +1,5 @@
-import DefaultContainer from '../components/default-container-component';
-import {render, RenderPosition} from "../utils/render";
+import DefaultContainer from '../../components/default-container-component';
+import {render, RenderPosition} from "../../utils/render";
 
 export default class NewEventButtonController {
   constructor(container, tripEvents) {

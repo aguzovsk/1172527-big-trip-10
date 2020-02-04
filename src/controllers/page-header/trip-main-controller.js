@@ -1,5 +1,5 @@
-import DefaultContainer from "../components/default-container-component";
-import {render, RenderPosition} from "../utils/render";
+import DefaultContainer from "../../components/default-container-component";
+import {render, RenderPosition} from "../../utils/render";
 import TripInfoController from "./trip-info-controller";
 import TripControlsController from './trip-controls-controller';
 import NewEventButtonController from "./new-event-button-controller";

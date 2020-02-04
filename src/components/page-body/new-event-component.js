@@ -1,12 +1,12 @@
-import {capitalize, getTypeText, isValidPoint} from '../utils/common';
-import {offerTypes} from '../const';
-import AbstractSmartComponent from './abstract-smart-component';
+import {capitalize, getTypeText, isValidPoint} from '../../utils/common';
+import {offerTypes} from '../../const';
+import AbstractSmartComponent from '../abstract-smart-component';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import 'flatpickr/dist/themes/light.css';
-import {formatDate} from '../utils/date-utils';
-import Offers from '../models/offers-model';
-import OffersWithType from '../models/offers-model';
+import {formatDate} from '../../utils/date-utils';
+import Offers from '../../models/offers-model';
+import OffersWithType from '../../models/offers-model';
 
 const createCitiesMarkup = (cities) => {
   return cities

@@ -1,4 +1,4 @@
-import {FilterTypes} from "../components/filters-component";
+import {FilterTypes} from "../components/page-header/filters-component";
 import {isSameDay} from './date-utils.js';
 
 export default class FilterPredicate {
