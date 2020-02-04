@@ -9,6 +9,7 @@ export const isSameMonth = (date1, date2) => moment(date1).isSame(date2, `month`
 export const isSameDay = (date1, date2) => moment(date1).isSame(date2, `day`);
 
 export const convertDateToDatetime = (date) => moment(date).format(`YYYY-MM-DDTHH:mm`);
+export const formatDate = (date) => moment(date).format(`DD/MM/YYYY HH:mm`);
 
 export const computeDuration = (startDate, endDate) => {
   const start = moment(startDate);

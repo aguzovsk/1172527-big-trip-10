@@ -1,5 +1,5 @@
-import {getMonthDay, convertDateToDatetime} from '../utils/date-utils.js';
-import AbstractComponent from './abstract-component.js';
+import {getMonthDay, convertDateToDatetime} from '../utils/date-utils';
+import AbstractComponent from './abstract-component';
 
 const createDayMarkup = (index, date) => {
   return (
@@ -24,4 +24,25 @@ export default class DayComponent extends AbstractComponent {
   getTemplate() {
     return createDayMarkup(this._index, this._date);
   }
+
+  _getDayCounterElement() {
+    return this.getElement().querySelector(`.day__counter`);
+  }
+/*
+  incrementDay() {
+    const dayCounter = this._getDayCounterElement();
+
+    if (datCounter) {
+      dayCounter.innerText = this._index + 1;
+    }
+  }
+
+  decrementDay() {
+    const dayCounter = this._getDayCounterElement();
+
+    if (datCounter) {
+      dayCounter.innerText = this._index - 1;
+    }
+  }
+  */
 }

@@ -4,6 +4,9 @@ export const MenuItem = menuNames.reduce((obj, name) =>
   Object.assign(obj, {[name.toUpperCase()]: name}), {}
 );
 export const filterNames = [`everything`, `future`, `past`];
+
+export const URL = `https://htmlacademy-es-10.appspot.com/big-trip/`;
+export const AUTHORIZATION = `Basic Anub'seran`;
 export const offerTypes = new Map([
   [
     `Transfer`,
@@ -26,30 +29,7 @@ export const offerTypes = new Map([
     ]
   ]
 ]);
-/*
-export const offerTypes = [
-  {
-    name: `Transfer`,
-    types: [
-      `taxi`,
-      `bus`,
-      `train`,
-      `ship`,
-      `transport`,
-      `drive`,
-      `flight`
-    ]
-  },
-  {
-    name: `Activity`,
-    types: [
-      `check-in`,
-      `sightseeing`,
-      `restaurant`
-    ]
-  }
-];
-*/
+
 export const offerTypesEmoji = {
   taxi: String.fromCodePoint(`0x1F695`),
   bus: String.fromCodePoint(`0x1F68C`),
@@ -61,15 +41,4 @@ export const offerTypesEmoji = {
   [`check-in`]: String.fromCodePoint(`0x1F3E8`),
   sightseeing: String.fromCodePoint(`0x1F5FC`),
   restaurant: String.fromCodePoint(`0x1F37D`)
-};
-
-export const dummyPoint = {
-  id: Number.NaN,
-  destination: {name: ``},
-  offers: [],
-  basePrice: 0,
-  isFavorite: false,
-  dateFrom: new Date(),
-  dateTo: new Date(+(new Date()) + 600000),
-  type: offerTypes.values().next
 };

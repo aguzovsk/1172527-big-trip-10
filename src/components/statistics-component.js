@@ -1,8 +1,8 @@
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import AbstractSmartComponent from './abstract-smart-component.js';
-import {offerTypesEmoji, offerTypes} from '../const.js';
-import {computeDuration} from '../utils/date-utils.js';
+import AbstractSmartComponent from './abstract-smart-component';
+import {offerTypesEmoji, offerTypes} from '../const';
+import {computeDuration} from '../utils/date-utils';
 
 const getRandomColor = () => {
   const value = Math.floor(Math.random() * 0xffffff);
@@ -245,14 +245,17 @@ const statisticsTemplate = () => {
 };
 
 export default class StatisticsComponent extends AbstractSmartComponent {
-  constructor(points) {
+  constructor(pointModel) {
     super();
 
-    this._points = points;
+    this._pointModel = pointModel;
 
     this._moneyChart = null;
     this._transportChart = null;
     this._timeChart = null;
+
+    this._onFilterChangeHandler = this._onFilterChangeHandler.bind(this);
+    pointModel.addOnFilterChangeHandler(this._onFilterChangeHandler);
   }
 
   getTemplate() {
@@ -268,7 +271,9 @@ export default class StatisticsComponent extends AbstractSmartComponent {
   rerender() {
     super.rerender();
 
-    this._renderCharts();
+    if (this._isVisible) {
+      this._renderCharts();
+    }
   }
 
   recoveryListeners() {}
@@ -279,7 +284,7 @@ export default class StatisticsComponent extends AbstractSmartComponent {
 
   _renderCharts() {
     const element = this.getElement();
-    const points = this._points.getAllPoints();
+    const points = this._pointModel.getPoints();
 
     const moneyCtx = element.querySelector(`.statistics__chart--money`);
     const transportCtx = element.querySelector(`.statistics__chart--transport`);
@@ -306,6 +311,12 @@ export default class StatisticsComponent extends AbstractSmartComponent {
     if (this._timeChart) {
       this._timeChart.destroy();
       this._timeChart = null;
+    }
+  }
+
+  _onFilterChangeHandler() {
+    if (this._isVisible) {
+      this.rerender();
     }
   }
 }

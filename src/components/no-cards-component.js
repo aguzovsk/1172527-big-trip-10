@@ -1,4 +1,4 @@
-import AbstractComponent from './abstract-component.js';
+import AbstractComponent from './abstract-component';
 
 export default class NoCardsComponent extends AbstractComponent {
   getTemplate() {

@@ -1,4 +1,4 @@
-import AbstractComponent from './abstract-component.js';
+import AbstractComponent from './abstract-component';
 
 export const SortTypes = {
   BY_EVENT: `sort-event`,

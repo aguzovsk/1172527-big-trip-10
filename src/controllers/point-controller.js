@@ -1,32 +1,34 @@
-import CardComponent from "../components/card";
-import CardEditComponent from "../components/new-event";
-import {render, RenderPosition, replaceOldToNew, remove} from '../utils/render.js';
+import CardComponent from "../components/card-component";
+import CardEditComponent from "../components/new-event-component";
+import {render, RenderPosition, replaceOldToNew, remove} from '../utils/render';
 import {generateOfferList} from "../mock/offer";
+import {isValidPoint} from '../utils/common';
 
-const Mode = {
+export const PointControllerMode = {
   DEFAULT: `default`,
   EDIT: `edit`,
   CREATE: `create`
 };
 
 export default class PointController {
-  constructor(container, destinations, onDataChange, onViewChange) {
+  constructor(container, dependencies) {
+    const {destinations, onDataChange, onViewChange} = dependencies;
     this._container = container;
     this._onDataChange = onDataChange;
     this._onViewChange = onViewChange;
     this._destinations = destinations;
 
-    this._mode = Mode.DEFAULT;
+    this._mode = PointControllerMode.DEFAULT;
     this._pointComponent = null;
     this._pointEditComponent = null;
 
     this._onEscKeyDown = this._onEscKeyDown.bind(this);
   }
 
-  render(event/* , mode */) {
-    // if (mode) {
-    //   this._mode = Mode.CREATION;
-    // }
+  render(event, mode) {
+    if (mode) {
+      this._mode = mode;
+    }
 
     const oldPointComponent = this._pointComponent;
     const oldPointEditComponent = this._pointEditComponent;
@@ -38,14 +40,14 @@ export default class PointController {
       this._replacePointToEdit();
     });
 
-    this._pointEditComponent.setFavoriteChangeHandler((oldEvent) => {
-      this._onDataChange(this, oldEvent, Object.assign({}, oldEvent, {
-        isFavorite: !oldEvent.isFavorite
+    this._pointEditComponent.setFavoriteChangeHandler((oldPoint) => {
+      this._onDataChange(this, oldPoint, oldPoint.clone({
+        isFavorite: !oldPoint.isFavorite
       }));
     });
 
-    this._pointEditComponent.setSubmitHandler((oldEvent, options) => {
-      this._onDataChange(this, oldEvent, Object.assign({}, oldEvent, options));
+    this._pointEditComponent.setSubmitHandler((oldPoint, options) => {
+      this._onDataChange(this, isValidPoint(oldPoint) && oldPoint, oldPoint.clone(options));
       this._replaceEditToPoint();
     });
 
@@ -53,25 +55,24 @@ export default class PointController {
       this._replaceEditToPoint();
     });
 
-    this._pointEditComponent.setDeleteHandler((oldEvent) => {
-      this._onDataChange(this, oldEvent, null);
+    this._pointEditComponent.setDeleteHandler((oldPoint) => {
+      this._onDataChange(this, oldPoint, null);
     });
 
     this._pointEditComponent.setEventTypeChangeHandler(() => {
       return generateOfferList();
     });
 
-    if (event) {
+    if (this._mode !== PointControllerMode.CREATE) {
       if (oldPointEditComponent && oldPointComponent) {
         replaceOldToNew(oldPointComponent, this._pointComponent);
         replaceOldToNew(oldPointEditComponent, this._pointEditComponent);
       } else {
-        render(this._container, this._pointComponent.getElement(), RenderPosition.BEFOREEND);
+        render(this._container, this._pointComponent, RenderPosition.BEFOREEND);
       }
     } else {
       this._onViewChange();
-      this._mode = Mode.CREATE;
-      render(this._container, this._pointEditComponent.getElement(), RenderPosition.AFTEREND);
+      render(this._container, this._pointEditComponent, RenderPosition.AFTEREND);
     }
   }
 
@@ -88,7 +89,7 @@ export default class PointController {
     this._onViewChange();
 
     replaceOldToNew(this._pointComponent, this._pointEditComponent);
-    this._mode = Mode.EDIT;
+    this._mode = PointControllerMode.EDIT;
   }
 
   _replaceEditToPoint() {
@@ -96,12 +97,12 @@ export default class PointController {
 
     // this._pointEditComponent.reset();
     replaceOldToNew(this._pointEditComponent, this._pointComponent);
-    this._mode = Mode.DEFAULT;
+    this._mode = PointControllerMode.DEFAULT;
   }
 
   setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
-      if (this._mode === Mode.CREATE) {
+    if (this._mode !== PointControllerMode.DEFAULT) {
+      if (this._mode === PointControllerMode.CREATE) {
         this.empty();
       } else {
         this._replaceEditToPoint();
@@ -109,18 +110,26 @@ export default class PointController {
     }
   }
 
-  empty() {
+  clear() {
     remove(this._pointComponent);
     remove(this._pointEditComponent);
+    this._pointComponent = null;
+    this._pointEditComponent = null;
+  }
+
+  empty() {
+    this.clear();
     this._container = null;
     // this._onDataChange = null;
     // this._onViewChange = null;
     this._destinations = null;
 
     this._mode = null;
-    this._pointComponent = null;
-    this._pointEditComponent = null;
 
     // this._onEscKeyDown = null;
+  }
+
+  getMode() {
+    return this._mode;
   }
 }

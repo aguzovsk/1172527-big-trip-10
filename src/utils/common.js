@@ -9,6 +9,8 @@ export const getShuffled = (input) => {
   return items;
 };
 
+export const isValidPoint = (point) => !!point && !Number.isNaN(point.id);
+
 export const getTypeText = (type) => {
   const activityTypes = offerTypes.get(`Activity`);
   const isActivity = activityTypes.indexOf(type) !== -1;
@@ -20,11 +22,28 @@ export const getTypeText = (type) => {
   }
 };
 
-export const getRandomIntInRange =
-  (min, max) => Math.floor(Math.random() * (max - min)) + min;
+export const getInstanceShallowCopy = (instance) => {
+  return (
+    Object.assign(
+      Object.create(
+        Object.getPrototypeOf(instance)
+      ),
+      instance
+    )
+  );
+};
 
-export const capitalize =
-  (str) => str.charAt(0).toUpperCase() + str.slice(1);
+export const getFirstThree = (items) => {
+  return items.slice(0, 3);
+};
+
+export const getRandomIntInRange = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min;
+};
+
+export const capitalize = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
 
 export const formatDecimal = (dec) => dec < 10 ? `0${dec}` : `${dec}`;
 

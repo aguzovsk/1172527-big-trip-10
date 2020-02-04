@@ -1,5 +1,5 @@
-import {capitalize} from '../utils/common.js';
-import AbstractComponent from './abstract-component.js';
+import {capitalize} from '../utils/common';
+import AbstractComponent from './abstract-component';
 
 export const FilterTypes = {
   EVERYTHING: `everything`,
@@ -41,7 +41,7 @@ export default class FiltersComponent extends AbstractComponent {
     return createFiltersTemplate(this._filterNames);
   }
 
-  setEventHandler(handler) {
+  setOnChangeEventHandler(handler) {
     const form = this.getElement();
     form.addEventListener(`change`, (evt) => {
       const value = evt.target.value;

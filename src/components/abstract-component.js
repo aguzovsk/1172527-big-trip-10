@@ -1,4 +1,4 @@
-import {createElement} from '../utils/render.js';
+import {createElement} from '../utils/render';
 
 export default class AbstractComponent {
   constructor() {
@@ -7,6 +7,7 @@ export default class AbstractComponent {
     }
 
     this._element = null;
+    this._isVisible = true;
   }
 
   getTemplate() {
@@ -26,6 +27,7 @@ export default class AbstractComponent {
   }
 
   show() {
+    this._isVisible = true;
     if (!this._element) {
       return;
     }
@@ -34,6 +36,7 @@ export default class AbstractComponent {
   }
 
   hide() {
+    this._isVisible = false;
     if (!this._element) {
       return;
     }

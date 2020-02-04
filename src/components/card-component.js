@@ -1,7 +1,6 @@
-import {getHourMinute, convertDateToDatetime, getDateDiff} from '../utils/date-utils.js';
-import {getTypeText, getEventTotalPrice} from '../utils/common.js';
-import AbstractComponent from './abstract-component.js';
-import {dummyPoint} from '../const.js';
+import {getHourMinute, convertDateToDatetime, getDateDiff} from '../utils/date-utils';
+import {getTypeText, getEventTotalPrice, getFirstThree} from '../utils/common';
+import AbstractComponent from './abstract-component';
 
 const createEventOfferMarkup = (offer) => {
   const {description, price} = offer;
@@ -14,8 +13,9 @@ const createEventOfferMarkup = (offer) => {
   );
 };
 
-const showOffers =
-  (offers) => offers.map(createEventOfferMarkup).join(`\n`);
+const showOffers = (offers) => {
+  return offers.map(createEventOfferMarkup).join(`\n`);
+};
 
 const createCardTemplate = (event) => {
   const {type, dateFrom, dateTo, offers, destination} = event;
@@ -23,6 +23,7 @@ const createCardTemplate = (event) => {
   const start = convertDateToDatetime(dateFrom);
   const end = convertDateToDatetime(dateTo);
   const duration = getDateDiff(dateFrom, dateTo);
+  const name = destination && destination.name || ``;
 
   return (
     `<li class="trip-events__item">
@@ -30,7 +31,7 @@ const createCardTemplate = (event) => {
         <div class="event__type">
           <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
         </div>
-        <h3 class="event__title">${getTypeText(type)} ${destination.name}</h3>
+        <h3 class="event__title">${getTypeText(type)} ${name}</h3>
 
         <div class="event__schedule">
           <p class="event__time">
@@ -47,7 +48,7 @@ const createCardTemplate = (event) => {
 
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${showOffers(offers)}
+          ${showOffers(getFirstThree(offers))}
         </ul>
 
         <button class="event__rollup-btn" type="button">
@@ -61,7 +62,7 @@ const createCardTemplate = (event) => {
 export default class CardComponent extends AbstractComponent {
   constructor(event) {
     super();
-    this._event = event || dummyPoint;
+    this._event = event;
   }
 
   getTemplate() {

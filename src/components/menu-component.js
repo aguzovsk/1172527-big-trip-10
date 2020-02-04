@@ -1,4 +1,4 @@
-import AbstractComponent from './abstract-component.js';
+import AbstractComponent from './abstract-component';
 
 const createMenuButtonMarkup = (name, isActive, reference = `#`) => {
   const activeClass = isActive ? ` trip-tabs__btn--active` : ``;
@@ -7,10 +7,11 @@ const createMenuButtonMarkup = (name, isActive, reference = `#`) => {
   );
 };
 
-const showTabs = (names, currentState) =>
-  names.map(
+const showTabs = (names, currentState) => {
+  return names.map(
     (name) => createMenuButtonMarkup(name, name === currentState)
   ).join(`\n`);
+};
 
 const createMenuTemplate = (names, currentState) => {
   return (
@@ -28,10 +29,11 @@ export default class MenuComponent extends AbstractComponent {
   }
 
   getTemplate() {
-    return createMenuTemplate(this._names, this._state);
+    const template = createMenuTemplate(this._names, this._state);
+    return template;
   }
 
-  setOnChange(handler) {
+  setOnChangeEventHandler(handler) {
     const links = this.getElement().querySelectorAll(`a`);
     links.forEach((link) => link.addEventListener(`click`, (evt) => {
       const target = evt.target;
@@ -41,7 +43,7 @@ export default class MenuComponent extends AbstractComponent {
         return;
       }
 
-      links.forEach((l) => l.classList.remove(`trip-tabs__btn--active`));
+      links.forEach((anchor) => anchor.classList.remove(`trip-tabs__btn--active`));
       target.classList.add(`trip-tabs__btn--active`);
       this._state = name;
       handler(name);

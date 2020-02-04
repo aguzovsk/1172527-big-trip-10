@@ -1,55 +1,49 @@
-import MenuComponent from './components/menu.js';
-import RouteComponent from './components/route.js';
-import {generateEventList} from './mock/event-details.js';
-import {render, RenderPosition} from './utils/render.js';
-import {menuNames, MenuItem} from './const.js';
-import TripController from './controllers/trip.js';
-import PointsModel from './models/points.js';
-import FiltersController from './controllers/filters.js';
-import StatisticsComponent from './components/statistics.js';
+import TripEventsController from './controllers/trip-events-controller';
+import StatisticsComponent from './components/statistics-component';
+import DefaultContainer from './components/default-container-component';
+import TripMainController from './controllers/trip-main-controller';
+import PointsModel from './models/points-model';
+import API from './api';
+import {URL, AUTHORIZATION} from './const';
+import {render, RenderPosition} from './utils/render';
 
-const events = generateEventList();
-events.sort((a, b) => a.dateFrom - b.dateFrom);
+const api = new API(URL, AUTHORIZATION);
+const downloadPoints = api.getPoints()
+  .then((points) => {
+    const pointsModel = new PointsModel(api);
+    pointsModel.setPoints(points);
+    return pointsModel;
+  });
 
-const pointsModel = new PointsModel();
-pointsModel.setPoints(events);
+const downloadOffers = api.getOffers();
+const downloadDestinations = api.getDestinations();
 
-const tripInfo = document.querySelector(`.trip-main__trip-info`);
-if (events.length) {
-  render(tripInfo, new RouteComponent(events).getElement(), RenderPosition.AFTERBEGIN);
-}
+Promise.all([downloadPoints, downloadOffers, downloadDestinations])
+  .then((values) => {
+    const pointsModel = values[0];
 
-const tripControls = document.querySelector(`.trip-main__trip-controls`);
-const menuComponent = new MenuComponent(menuNames);
-render(tripControls.children[0], menuComponent.getElement(), RenderPosition.AFTEREND);
-const filtersController = new FiltersController(tripControls, pointsModel);
-filtersController.render();
+    const tripEventsDependencies = {
+      pointsModel,
+      offers: values[1],
+      destinations: values[2]
+    };
 
-const tripEvents = document.querySelector(`.trip-events`);
+    const bodyElement = document.querySelector(`main .page-body__container`);
+    const bodyComponent = new DefaultContainer(bodyElement);
+    const tripEventsController = new TripEventsController(bodyComponent, tripEventsDependencies);
+    const statisticsComponent = new StatisticsComponent(pointsModel);
 
-const tripController = new TripController(tripEvents, pointsModel);
-tripController.render();
+    const tripHeaderDependencies = {
+      tripEvents: tripEventsController,
+      statistics: statisticsComponent,
+      pointsModel
+    };
 
-const bodyContainer = document.querySelector(`main .page-body__container`);
-const statisticsComponent = new StatisticsComponent(pointsModel);
-render(bodyContainer, statisticsComponent.getElement(), RenderPosition.BEFOREEND);
-statisticsComponent.hide();
-menuComponent.setOnChange((menuName) => {
-  if (menuName === MenuItem.TABLE) {
-    // tripController.show();
-    tripEvents.classList.remove(`visually-hidden`);
+    const headerElement = document.querySelector(`header .page-header__container`);
+    const tripMainController = new TripMainController(new DefaultContainer(headerElement), tripHeaderDependencies);
+
+    tripMainController.render();
+    tripEventsController.render();
+    render(bodyComponent, statisticsComponent, RenderPosition.BEFOREEND);
     statisticsComponent.hide();
-  } else if (menuName === MenuItem.STATS) {
-    // tripController.hide();
-    tripEvents.classList.add(`visually-hidden`);
-    statisticsComponent.show();
-  } else {
-    throw new Error(`Undefined menu type ${menuName}`);
-  }
-});
-
-
-const totalSum = tripInfo.querySelector(`.trip-info__cost-value`);
-const eventPrices = tripEvents.querySelectorAll(`.event__price-value`);
-const sum = Array.prototype.reduce.call(eventPrices, (acc, {innerText}) => acc + parseInt(innerText, 10), 0);
-totalSum.innerText = sum;
+  });
